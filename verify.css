@@ -1,0 +1,59 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.verification-screen {
+    background-color: white;
+    color: #000000;
+    padding: 20px;
+    text-align: center;
+}
+
+.verification-screen h2 {
+    font-size: 24px;
+}
+
+.verification-screen form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.verification-screen input[type="text"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+}
+
+.verification-screen button {
+    background-color: orange; 
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.verification-screen button:hover {
+    background-color: purple; 
+}
+
+@media (max-width: 600px) {
+    .verification-screen h2 {
+        font-size: 22px;
+    }
+
+    .verification-screen form {
+        padding: 15px;
+    }
+
+    .verification-screen input[type="text"] {
+        padding: 8px;
+    }
+
+    .verification-screen button {
+        padding: 12px 25px;
+    }
+}
