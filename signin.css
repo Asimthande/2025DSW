@@ -1,0 +1,72 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.signin-screen {
+    background-color: white;
+    color: #000000;
+    padding: 20px;
+    text-align: center;
+}
+
+.signin-screen h2 {
+    font-size: 28px;
+}
+
+.signin-screen form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.signin-screen input[type="email"], 
+.signin-screen input[type="password"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+}
+
+.signin-screen button {
+    background-color: orange; 
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.signin-screen button:hover {
+    background-color: purple; 
+}
+
+.signin-screen a {
+    color: orange;
+    display: block;
+    margin-top: 10px;
+}
+
+.signin-screen .social-login button {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 600px) {
+    .signin-screen h2 {
+        font-size: 22px;
+    }
+
+    .signin-screen form {
+        padding: 15px;
+    }
+
+    .signin-screen input[type="email"], 
+    .signin-screen input[type="password"] {
+        padding: 8px;
+    }
+
+    .signin-screen button {
+        padding: 12px 25px;
+    }
+}
