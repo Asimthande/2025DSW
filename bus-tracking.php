@@ -1,133 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Live Tracking</title>
+    <meta charset="UTF-8">
+    <title>Bus Tracking</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: hsl(30, 30%, 95%);
+        }
 
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <style>
-    body {
-      background-color: #f0f8ff;
-      font-family: 'Arial', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      color: #333;
-      padding: 20px;
-    }
+        .control-panel {
+            padding: 20px;
+            text-align: center;
+            background: hsl(275, 80%, 50%);
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            font-size: 20px;
+        }
 
-    h3 {
-      font-size: 30px;
-      margin-bottom: 20px;
-      color: #2c3e50;
-    }
+        .control-panel label {
+            font-weight: bold;
+            margin-right: 15px;
+        }
 
-    #coordinates {
-      font-size: 18px;
-      margin-top: 15px;
-      font-weight: bold;
-      color: #2980b9;
-    }
+        select {
+            padding: 12px 20px;
+            font-size: 18px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            background-color: white;
+            color: hsl(275, 80%, 50%);
+            font-weight: bold;
+        }
 
-    #map {
-      height: 500px;
-      width: 100%;
-      max-width: 800px;
-      border: 3px solid #2980b9;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      margin-top: 20px;
-    }
+        #map {
+            height: 88vh;
+            width: 100%;
+            z-index: 1;
+        }
 
-    .content {
-      max-width: 900px;
-      text-align: center;
-    }
-
-    .user-info {
-      font-size: 18px;
-      margin-top: 30px;
-      color: #333;
-      font-weight: normal;
-    }
-
-    .user-info p {
-      margin: 5px 0;
-    }
-
-    .user-info a {
-      font-size: 16px;
-      color: #007bff;
-      text-decoration: none;
-    }
-
-    .user-info a:hover {
-      text-decoration: underline;
-    }
-
-    @media (max-width: 768px) {
-      h3 {
-        font-size: 24px;
-      }
-
-      #coordinates {
-        font-size: 16px;
-      }
-
-      .user-info {
-        font-size: 16px;
-      }
-
-      #map {
-        height: 300px;
-      }
-    }
-  </style>
+        .bus-label {
+            background: hsl(10, 90%, 50%);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            display: inline-block;
+            white-space: nowrap;
+            margin-bottom: 4px;
+        }
+    </style>
 </head>
 <body>
 
-<div class="content">
-  <h3>Driver's Live Tracking</h3>
-  <p id="coordinates">Fetching coordinates...</p>
-  <div id="map"></div>
+<div class="control-panel">
+    <label for="bus-select">🚌 Select Bus ID:</label>
+    <select id="bus-select">
+        <?php for ($i = 1; $i <= 10; $i++): ?>
+            <option value="<?= $i ?>">Bus <?= $i ?></option>
+        <?php endfor; ?>
+    </select>
 </div>
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
-  var map = L.map('map').setView([51.505, -0.09], 13);
+    let map = L.map('map').setView([0, 0], 15)
+    let marker = null
+    let selectedBusID = document.getElementById("bus-select").value
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map)
 
-  var marker = L.marker([51.505, -0.09]).addTo(map);
+    function createLabeledMarker(lat, lng, busID) {
+        const label = `<div class="bus-label">Bus ${busID}</div>`
+        const originalMarker = L.icon({
+            iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+            iconSize: [20, 32],
+            iconAnchor: [10, 32],
+            popupAnchor: [0, -32]
+        })
 
-  function updateLocation(lat, lng) {
-    marker.setLatLng([lat, lng]);  
-    map.setView([lat, lng]);
-    document.getElementById('coordinates').innerText = `Latitude: ${lat}, Longitude: ${lng}`;
-  }
+        const customHtml = L.divIcon({
+            className: '',
+            html: label,
+            iconSize: null,
+        })
 
-  if (navigator.geolocation) {
-    navigator.geolocation.watchPosition(function(position) {
-      var lat = position.coords.latitude;
-      var lng = position.coords.longitude;
-      updateLocation(lat, lng);
-    }, function(error) {
-      console.error('Error getting geolocation:', error);
-      document.getElementById('coordinates').innerText = 'Unable to retrieve location.';
-    }, {
-      enableHighAccuracy: true,  
-      maximumAge: 0            
-    });
-  } else {
-    console.log("Geolocation is not supported by this browser.");
-    document.getElementById('coordinates').innerText = 'Geolocation not supported.';
-  }
+        const labelMarker = L.marker([lat, lng], { icon: customHtml }).addTo(map)
+        const mainMarker = L.marker([lat, lng], { icon: originalMarker }).addTo(map)
+
+        return [labelMarker, mainMarker]
+    }
+
+    function fetchLocation(centerMap = false) {
+        $.getJSON("fetch_location.php?BusID=" + selectedBusID, function (data) {
+            if (data && data.Latitude && data.Longitude) {
+                const lat = parseFloat(data.Latitude)
+                const lng = parseFloat(data.Longitude)
+
+                if (marker) {
+                    marker.forEach(m => map.removeLayer(m))
+                }
+
+                marker = createLabeledMarker(lat, lng, selectedBusID)
+                if (centerMap) {
+                    map.setView([lat, lng], 15)
+                }
+            }
+        })
+    }
+
+    fetchLocation(true)
+    setInterval(() => fetchLocation(false), 5000)
+
+    document.getElementById("bus-select").addEventListener("change", function () {
+        selectedBusID = this.value
+        fetchLocation(true)
+    })
 </script>
 
 </body>

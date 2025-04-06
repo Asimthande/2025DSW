@@ -51,23 +51,23 @@ $role = $_SESSION['role'];
 
     <nav class="sidebar" id="sidebar">
         <h2>Dashboard</h2>
-        <ul>
+              <ul>
             <li><button onclick="window.location.href='dashboard.php'"><i class="fas fa-home"></i> Home</button></li>
-            <li><button onclick="window.location.href='profile.php'" <?php if ($role == 'guest') echo 'style="opacity: 0.5; pointer-events: none;"'; ?>><i class="fas fa-user"></i> Profile</button></li>
-            <li><button onclick="window.location.href='bus-tracking.php'" <?php if ($role == 'guest') echo 'style="opacity: 0.5; pointer-events: none;"'; ?>><i class="fas fa-bus"></i> Bus Tracking</button></li>
-            <li><button onclick="window.location.href='schedule.php'"><i class="fas fa-calendar"></i> Bus Schedule</button></li>
-            <li><button onclick="window.location.href='reservation.php'" <?php if ($role == 'guest') echo 'style="opacity: 0.5; pointer-events: none;"'; ?>><i class="fas fa-clipboard-check"></i> Reservation</button></li>
-            <li><button onclick="window.location.href='reserve-seat.php'" <?php if ($role == 'guest') echo 'style="opacity: 0.5; pointer-events: none;"'; ?>><i class="fas fa-chair"></i> Reserve Seat</button></li>
-            <li><button onclick="window.location.href='notifications.php'" <?php if ($role == 'guest') echo 'style="opacity: 0.5; pointer-events: none;"'; ?>><i class="fas fa-bell"></i> Notifications</button></li>
+            <li><button onclick="window.location.href='profile.php'" <?= $role == 'guest' ? 'style="opacity: 0.5;display:none; pointer-events: none;"' : '' ?>><i class="fas fa-user"></i> Profile</button></li>
+            <li><button onclick="window.location.href='bus-tracking.php'" <?= $role == 'guest' ? 'style="opacity: 0.5; pointer-events: none;display:none;"' : '' ?>><i class="fas fa-bus"></i> Live Tracking</button></li>
+            <li><button onclick="window.location.href='schedule.php'"><i class="fas fa-calendar-alt"></i> Schedule</button></li>
+            <li><button onclick="window.location.href='chart.php'" <?= $role == 'guest' ? 'style="opacity: 0.5;display:none; pointer-events: none;"' : '' ?>><i class="fas fa-chart-bar"></i> Stats & Analysis</button></li>
+            <li><button onclick="window.location.href='reserve-seat.php'" <?= $role == 'guest' ? 'style="opacity: 0.5;display:none; pointer-events: none;"' : '' ?>><i class="fas fa-chair"></i> Reserve Seat</button></li>
+            <li><button onclick="window.location.href='reservation.php'" <?= $role == 'guest' ? 'style="opacity: 0.5;display:none; pointer-events: none;"' : '' ?>><i class="fas fa-clipboard-check"></i> My Reservations</button></li>
+            <li><button onclick="window.location.href='notifications.php'" <?= $role == 'guest' ? 'style="opacity: 0.5;display:none; pointer-events: none;"' : '' ?>><i class="fas fa-bell"></i> Notifications</button></li>
+            <li><button onclick="window.location.href='verify.php'" <?= $role == 'guest' ? 'style="opacity: 0.5; pointer-events: none;display:none;"' : '' ?>><i class="fas fa-shield-alt"></i> Verify</button></li>
+            <li><button onclick="window.location.href='settings.php'" <?= $role == 'guest' ? 'style="opacity: 0.5; pointer-events: none;display:none;"' : '' ?>><i class="fas fa-cogs"></i> Settings</button></li>
             <li><button onclick="window.location.href='weather.php'"><i class="fas fa-cloud-sun"></i> Weather</button></li>
-            <li><button onclick="window.location.href='support.php'"><i class="fas fa-headset"></i> Help & Support</button></li>
-            <li><button onclick="window.location.href='settings.php'" <?php if ($role == 'guest') echo 'style="opacity: 0.5; pointer-events: none;"'; ?>><i class="fas fa-cogs"></i> Settings</button></li>
-            <li><button onclick="window.location.href='maintainance.php'"><i class="fas fa-tools"></i> Maintenance</button></li>
-            <li><button onclick="window.location.href='termsandconditions.php'"><i class="fas fa-file-contract"></i> Terms & Conditions</button></li>
             <li><button onclick="window.location.href='emergency-alert.php'"><i class="fas fa-exclamation-circle"></i> Emergency Alert</button></li>
-            <li><button onclick="window.location.href='logout.php'"><i class="fas fa-sign-out-alt"></i> Logout</button></li><li>
-    <li><button onclick="window.location.href='verify.php'" <?php if ($role == 'guest') echo 'style="opacity: 0.5; pointer-events: none;"'; ?>><i class="fa-solid fa-shield-check"></i> <iclass="fa-solid fa-envelope"></i> Verify</button></li>
-
+            <li><button onclick="window.location.href='support.php'"><i class="fas fa-headset"></i> Help & Support</button></li>
+            <li><button onclick="window.location.href='termsandconditions.php'"><i class="fas fa-file-contract"></i> Terms & Conditions</button></li>
+            <li><button onclick="window.location.href='maintainance.php'"><i class="fas fa-tools"></i> Maintenance</button></li>
+            <li><button onclick="window.location.href='logout.php'"><i class="fas fa-sign-out-alt"></i> Logout</button></li>
         </ul>
     </nav>
     
