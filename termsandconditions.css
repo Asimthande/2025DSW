@@ -1,48 +1,37 @@
-/* termsandconditions.css */
-
-/* General Styling */
 body {
-    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: hsl(30, 30%, 95%);
+    color: #333;
 }
 
 .container {
-    max-width: 800px;
-    margin: 30px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 h1 {
+    color: hsl(10, 90%, 50%);
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
-h2 {
-    color: #4CAF50;
-}
-
-.terms-content {
-    margin-bottom: 30px;
-}
-
-.terms-content p,
-.terms-content ul {
-    font-size: 16px;
-    line-height: 1.6;
+.terms-content h2 {
+    margin-top: 25px;
+    color: hsl(25, 80%, 60%);
 }
 
 .terms-content ul {
-    list-style-type: disc;
-    margin-left: 20px;
+    padding-left: 20px;
 }
 
 .terms-content a {
-    color: #4CAF50;
+    color: hsl(290, 70%, 55%);
     text-decoration: none;
 }
 
@@ -50,46 +39,23 @@ h2 {
     text-decoration: underline;
 }
 
-/* Agreement Section */
 .agreement {
     text-align: center;
+    margin-top: 40px;
 }
 
-.agreement p {
-    font-size: 18px;
-    margin-bottom: 20px;
-}
-
-.agreement .btn {
-    padding: 10px 20px;
-    font-size: 16px;
-    margin: 0 10px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.agreement .btn:hover {
-    background-color: #45a049;
+.btn {
+    background-color: hsl(290, 70%, 55%);
+    border: none;
+    padding: 12px 24px;
     color: white;
+    border-radius: 6px;
+    font-size: 1rem;
+    margin: 0 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .container {
-        width: 100%;
-        padding: 15px;
-    }
-
-    h1 {
-        font-size: 22px;
-    }
-
-    h2 {
-        font-size: 18px;
-    }
-
-    .terms-content p,
-    .terms-content ul {
-        font-size: 14px;
-    }
+.btn:hover {
+    background-color: hsl(290, 70%, 50%);
 }

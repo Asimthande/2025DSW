@@ -15,6 +15,25 @@ sort($citiesAndTownships);
 $weatherData = null;
 $errorMessage = null;
 $weatherCondition = 'sunny';
+$seasonEmoji = '';
+$weatherEmoji = '';
+$season = '';
+
+// Determine South African season based on current month
+$month = date('n'); // 1 = Jan, 12 = Dec
+if ($month >= 6 && $month <= 8) {
+    $season = "Winter";
+    $seasonEmoji = '❄️';
+} elseif ($month >= 9 && $month <= 11) {
+    $season = "Spring";
+    $seasonEmoji = '🌸';
+} elseif ($month >= 12 || $month <= 2) {
+    $season = "Summer";
+    $seasonEmoji = '☀️';
+} elseif ($month >= 3 && $month <= 5) {
+    $season = "Autumn";
+    $seasonEmoji = '🍂';
+}
 
 if (isset($_GET['city']) && !empty($_GET['city'])) {
     $city = $_GET['city'];
@@ -28,6 +47,28 @@ if (isset($_GET['city']) && !empty($_GET['city'])) {
         $errorMessage = "City not found! Please try again.";
     } else {
         $weatherCondition = strtolower($weatherData['weather'][0]['main']);
+
+        // Assign emoji based on weather
+        switch ($weatherCondition) {
+            case 'clear':
+            case 'sunny':
+                $weatherEmoji = '🌞';
+                break;
+            case 'rain':
+                $weatherEmoji = '🌧️';
+                break;
+            case 'clouds':
+                $weatherEmoji = '☁️';
+                break;
+            case 'thunderstorm':
+                $weatherEmoji = '⛈️';
+                break;
+            case 'snow':
+                $weatherEmoji = '❄️';
+                break;
+            default:
+                $weatherEmoji = '🌡️';
+        }
     }
 }
 ?>
@@ -42,17 +83,7 @@ if (isset($_GET['city']) && !empty($_GET['city'])) {
 </head>
 <body class="<?php echo $weatherCondition; ?>">
     <div class="emoji">
-        <?php
-        if ($weatherCondition === 'sunny') {
-            echo '🌞';  
-        } elseif ($weatherCondition === 'rain') {
-            echo '🌧️';  
-        } elseif ($weatherCondition === 'clouds') {
-            echo '☁️';  
-        } elseif ($weatherCondition === 'thunderstorm') {
-            echo '⛈️';  
-        }
-        ?>
+        <?= $weatherEmoji . ' ' . $seasonEmoji ?>
     </div>
     <div class="container">
         <h1>Weather App</h1>
@@ -81,6 +112,7 @@ if (isset($_GET['city']) && !empty($_GET['city'])) {
                 <p><strong>Temperature:</strong> <?= $weatherData['main']['temp'] ?>°C</p>
                 <p><strong>Humidity:</strong> <?= $weatherData['main']['humidity'] ?>%</p>
                 <p><strong>Wind Speed:</strong> <?= $weatherData['wind']['speed'] ?> m/s</p>
+                <p><strong>Current Season:</strong> <?= $season ?></p>
             </div>
         <?php endif; ?>
     </div>

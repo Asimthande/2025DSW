@@ -1,59 +1,82 @@
+/* verify.css */
+
+/* Brand Colors */
+:root {
+  --primary: hsl(10, 90%, 50%);
+  --secondary: hsl(290, 70%, 55%);
+  --background: hsl(30, 30%, 95%);
+  --contrast: hsl(25, 80%, 60%);
+  --text-dark: #222;
+  --text-light: #fff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--background);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 .verification-screen {
-    background-color: white;
-    color: #000000;
-    padding: 20px;
-    text-align: center;
+  background: #fff;
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 100%;
+  max-width: 420px;
 }
 
 .verification-screen h2 {
-    font-size: 24px;
+  margin-bottom: 1rem;
+  color: var(--primary);
+  font-size: 1.75rem;
 }
 
-.verification-screen form {
-    max-width: 400px;
-    margin: 0 auto;
+.verification-screen p {
+  color: var(--text-dark);
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
 }
 
-.verification-screen input[type="text"] {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #CCCCCC;
-    border-radius: 4px;
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.verification-screen button {
-    background-color: orange; 
-    color: #FFFFFF;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
+input[type="text"] {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 2px solid var(--contrast);
+  border-radius: 8px;
+  outline: none;
+  transition: border 0.3s;
 }
 
-.verification-screen button:hover {
-    background-color: purple; 
+input[type="text"]:focus {
+  border-color: var(--primary);
 }
 
-@media (max-width: 600px) {
-    .verification-screen h2 {
-        font-size: 22px;
-    }
+button {
+  padding: 0.75rem;
+  font-size: 1rem;
+  background-color: var(--primary);
+  color: var(--text-light);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
 
-    .verification-screen form {
-        padding: 15px;
-    }
-
-    .verification-screen input[type="text"] {
-        padding: 8px;
-    }
-
-    .verification-screen button {
-        padding: 12px 25px;
-    }
+button:hover {
+  background-color: var(--secondary);
 }
