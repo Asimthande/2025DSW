@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UJ Stabus – Everything in One</title>
+  <link rel="stylesheet" href="index.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  <script src="index.js" defer></script>
+</head>
+
+<body>
+
+  <section id="splash-screen" class="splash-screen">
+    <div class="logo-container">
+      <img src="images/logo.jpeg" alt="App Logo" class="hex-logo">
+    </div>
+    <p class="welcome-text">Welcome to UJ Stabus</p>
+  </section>
+<script>
+  setTimeout(function () {
+    const splash = document.getElementById("splash-screen");
+    splash.classList.add("fade-out");
+    setTimeout(() => {
+      splash.style.display = "none";
+    }, 1000); 
+  }, 2000);
+</script>
+
+  <div id="main-content">
+
+    <header class="header">
+      <h1>UJ Stabus</h1>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#mission">Mission &amp; Values</a></li>
+          <li><a href="#instructions">How It Works</a></li>
+          <li><a href="#weather">Weather</a></li>
+          <li><a href="#org-structure">Our Team</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#video">Video</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <section class="bus-stop-animation" id="bus-stop-animation">
+      <script src="best.js"></script>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="section">
+      <h2>About UJ Stabus</h2>
+      <p>
+        UJ Stabus is a real-time transport service designed to help students easily commute between the University of Johannesburg's four campuses: Doornfontein, Auckland Park Bunting, Auckland Park Kingsway, and Soweto Campus. 
+        We offer live bus tracking, seat reservations, and weather updates to ensure a smooth, efficient, and comfortable journey for all students.
+      </p>
+    </section>
+
+    <!-- Mission -->
+    <section id="mission" class="section">
+      <h2>Our Mission & Values</h2>
+      <ul>
+        <li><strong>Reliability:</strong> Providing accurate, live updates on bus locations and ETAs to minimize waiting time.</li>
+        <li><strong>Transparency:</strong> Offering real-time tracking and clear communication between students and transport operators.</li>
+        <li><strong>Safety:</strong> Ensuring the safety of passengers during their commute by keeping everyone informed.</li>
+        <li><strong>Efficiency:</strong> Maximizing the on-time arrivals and minimizing wait times.</li>
+      </ul>
+    </section>
+
+    <!-- Instructions -->
+    <section id="instructions" class="section">
+      <h2>How It Works</h2>
+      <ol>
+        <li>Real-time GPS data allows students to track bus locations and estimated arrival times.</li>
+        <li>Students can reserve seats in advance, ensuring a smoother, more organized boarding process.</li>
+        <li>Stay updated on weather conditions to plan your journey effectively and comfortably.</li>
+        <li>Receive notifications about bus delays, seat availability, and weather-related changes.</li>
+      </ol>
+    </section>
+
+    <!-- Weather -->
+    <section id="weather" class="section">
+      <h2>Weather Forecast</h2>
+      <p>
+        Check real-time weather updates for key UJ campuses, helping you prepare for your trip in all weather conditions.
+      </p>
+    </section>
+
+    <!-- Organizational Structure / Team -->
+    <section id="org-structure" class="person-container">
+      <h2 class="org-title">Meet Our Team</h2>
+
+      <div class="person-card">
+        <img src="images/KB.jpg" alt="Mr Matoko">
+        <h1>Mr Matoko</h1>
+        <h2>Database Administrator</h2>
+        <p>
+          Mr Matoko ensures the company's data systems are efficient, secure, and reliable. He manages databases, optimizes performance, and implements backup solutions.
+        </p>
+      </div>
+
+      <div class="person-card">
+        <img src="images/Kamza.jpg" alt="Mr. Kgomommekoa">
+        <h1>Mr. Kgomommekoa</h1>
+        <h2>UI Designer</h2>
+        <p>
+          Mr. Kgomommekoa designs clean and simple interfaces for the Stabus app, focusing on ease of use, aesthetics, and fulfilling student needs.
+        </p>
+      </div>
+
+      <div class="person-card">
+        <img src="images/Martin.jpg" alt="Mr. Khoza">
+        <h1>Mr. Khoza</h1>
+        <h2>Front End Developer</h2>
+        <p>
+          Mr. Khoza builds responsive, mobile-friendly user interfaces that make booking, browsing, and using the Stabus platform seamless on any device.
+        </p>
+      </div>
+
+      <div class="person-card">
+        <img src="images/asim.jpg" alt="Mr. Mazibuko">
+        <h1>Mr. Mazibuko</h1>
+        <h2>Back End Developer</h2>
+        <p>
+          Mr. Mazibuko is responsible for server-side logic, APIs, database communication, and real-time features like bus tracking and alerts.
+        </p>
+      </div>
+
+      <div class="person-card">
+        <img src="images/Mahex.jpg" alt="Mr. Mahelehele">
+        <h1>Mr. Mahelehele</h1>
+        <h2>DevOps Engineer</h2>
+        <p>
+          Mr. Mahelehele manages infrastructure, CI/CD pipelines, and deployment automation to ensure a smooth development and production workflow.
+        </p>
+      </div>
+    </section>
+
+    <section id="contact" class="section contact">
+      <h2>Contact Us</h2>
+      <p><strong>Email:</strong> support@ujstabus.co.za</p>
+      <p><strong>Phone:</strong> +27 11 559 1234</p>
+      <p><strong>Office:</strong> UJ APK Campus, Kingsway Avenue, Johannesburg, 2092</p>
+    </section>
+
+    <!-- Video -->
+    <div style="text-align:center;">
+
+    <a href="signup.php" class="get-started-button">Get Started</a>
+    </div>
+    <section id="video" class="section">
+      <h2>Watch Our Video</h2>
+      <p>Learn more about how UJ Stabus can make your daily commute easier and more efficient by watching the video below:</p>
+      <div class="video-container">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/your-video-id" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </section>
+
+    <div style="text-align:center;">
+
+    <a href="signup.php" class="get-started-button">Get Started</a>
+    </div>
+    <!-- Footer -->
+    <footer class="footer">
+      &copy; 2025 UJ Stabus. All rights reserved.
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,22 +1,16 @@
 <?php
-// Start the session
 session_start();
 
-// Check if the user is authenticated
 if (!isset($_SESSION['user_id'])) {
-    // If not authenticated, redirect to the login page
     header("Location: signin.php");
     exit();
 }
 
-// Check if the user has the appropriate role (admin, driver, or student)
-if (!in_array($_SESSION['role'], ['admin', 'driver', 'student'])) {
-    // If the user doesn't have an allowed role, redirect to the dashboard or an error page
+if (!in_array($_SESSION['role'], ['admin', 'driver', 'student','guest'])) {
     header("Location: dashboard.php");
     exit();
 }
 
-// Sample bus data for maintenance
 $buses = [
     [
         'bus_id' => 101,
@@ -49,51 +43,53 @@ $buses = [
 </head>
 <body>
 
-<div class="container">
-    <h1>Buses Under Maintenance</h1>
-    
-    <div class="view-toggle">
-        <button id="table-view-btn">Table View</button>
-        <button id="picture-view-btn">Picture View</button>
-    </div>
+    <div class="container">
+        <h1>Buses Under Maintenance</h1>
 
-    <div id="table-view" class="view">
-        <table id="maintenance-table">
-            <thead>
-                <tr>
-                    <th>Bus ID</th>
-                    <th>Problem</th>
-                    <th>Estimated Return</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($buses as $bus): ?>
+        <div class="view-toggle">
+            <button id="table-view-btn">Table View</button>
+            <button id="picture-view-btn">Picture View</button>
+        </div>
+
+        <!-- Table View -->
+        <div id="table-view" class="view">
+            <table id="maintenance-table">
+                <thead>
                     <tr>
-                        <td><?php echo htmlspecialchars($bus['bus_id']); ?></td>
-                        <td><?php echo htmlspecialchars($bus['problem_description']); ?></td>
-                        <td><?php echo date('F d, Y H:i', strtotime($bus['estimated_return'])); ?></td>
+                        <th>Bus ID</th>
+                        <th>Problem</th>
+                        <th>Estimated Return</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    <?php foreach ($buses as $bus): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($bus['bus_id']); ?></td>
+                            <td><?php echo htmlspecialchars($bus['problem_description']); ?></td>
+                            <td><?php echo date('F d, Y H:i', strtotime($bus['estimated_return'])); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
 
-    <div id="picture-view" class="view" style="display:none;">
-        <div class="bus-cards">
-            <?php foreach ($buses as $bus): ?>
-                <div class="bus-card">
-                    <img src="<?php echo htmlspecialchars($bus['bus_image_url']); ?>" alt="Bus Image">
-                    <h3>Bus ID: <?php echo htmlspecialchars($bus['bus_id']); ?></h3>
-                    <p><?php echo htmlspecialchars($bus['problem_description']); ?></p>
-                    <p><strong>Estimated Return: </strong><?php echo date('F d, Y H:i', strtotime($bus['estimated_return'])); ?></p>
-                </div>
-            <?php endforeach; ?>
+        <!-- Picture View -->
+        <div id="picture-view" class="view" style="display:none;">
+            <div class="bus-cards">
+                <?php foreach ($buses as $bus): ?>
+                    <div class="bus-card">
+                        <img src="<?php echo htmlspecialchars($bus['bus_image_url']); ?>" alt="Bus Image">
+                        <h3>Bus ID: <?php echo htmlspecialchars($bus['bus_id']); ?></h3>
+                        <p><?php echo htmlspecialchars($bus['problem_description']); ?></p>
+                        <p><strong>Estimated Return:</strong> <?php echo date('F d, Y H:i', strtotime($bus['estimated_return'])); ?></p>
+                    </div>
+                <?php endforeach; ?>
+            </div>
         </div>
     </div>
 
-</div>
-
-<script src="Maintenance.js"></script>
+    <!-- External JS -->
+    <script src="maintenance.js"></script>
 
 </body>
 </html>

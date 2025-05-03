@@ -1,5 +1,4 @@
 <?php
-// Example schedule data (could be fetched from a database)
 $schedules = [
     ['bus_id' => '101', 'route' => 'Route A', 'departure_time' => '08:00 AM', 'arrival_time' => '09:00 AM'],
     ['bus_id' => '102', 'route' => 'Route B', 'departure_time' => '09:30 AM', 'arrival_time' => '10:30 AM'],
@@ -22,13 +21,11 @@ $schedules = [
     <div class="container">
         <h1>Bus Schedules</h1>
         
-        <!-- Button to switch views -->
         <div class="view-toggle">
             <button id="table-view" class="active">Table View</button>
             <button id="list-view">List View</button>
         </div>
 
-        <!-- Table View -->
         <div id="table-view-container" class="view-container">
             <table id="schedule-table">
                 <thead>

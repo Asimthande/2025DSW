@@ -1,12 +1,41 @@
 <?php
-// Start the session to check if the user is logged in
 session_start();
 
-// Check if the role session variable is set and if the role is 'student'
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'student') {
-    // Redirect to login page if the user is not a student
     header("Location: login.php");
     exit();
+}
+
+include "partial/connect.php";
+
+// Fetch the current booking details
+$bookingId = $_SESSION['booking_id'];  // Assume booking_id is stored in session
+$sql = "SELECT bus_id, booking_time FROM tblBookings WHERE booking_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $bookingId);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 0) {
+    echo "No booking found!";
+    exit();
+}
+
+$booking = $result->fetch_assoc();
+$busId = $booking['bus_id'];
+$currentHour = date('H', strtotime($booking['booking_time']));
+
+// Get reserved seats at the same hour and bus_id
+$sql = "SELECT reserved_seat FROM tblBookings 
+        WHERE bus_id = ? AND HOUR(booking_time) = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ii", $busId, $currentHour);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$reservedSeats = [];
+while ($row = $result->fetch_assoc()) {
+    $reservedSeats[] = $row['reserved_seat'];
 }
 ?>
 
@@ -15,174 +44,67 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'student') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bus Seat Layout</title>
+    <title>Reserve Seat</title>
     <link rel="stylesheet" href="reserve-seat.css">
 </head>
 <body>
     <div class="bus-container">
         <div class="driver-seat">
-            <div class="bus-plate">BUS-1234</div>
+            <div class="bus-plate">BUS-<?php echo $busId; ?></div>
             <div class="driver-id">Driver ID: 987654</div>
             Driver
         </div>
 
-        <div class="row">
-            <div class="seats-left">
-                <div class="seat available">L1</div>
-                <div class="seat reserved">L2</div>
-            </div>
-            <div class="aisle"></div>
-            <div class="seats-right">
-                <div class="seat reserved">R3</div>
-                <div class="seat available">R4</div>
-                <div class="seat reserved">R5</div>
-            </div>
+        <!-- Dynamically generate seats using PHP and JavaScript -->
+        <div id="seats-layout">
+            <!-- Seat layout will be injected here by JS -->
         </div>
-
-        <div class="row">
-            <div class="seats-left">
-                <div class="seat available">L6</div>
-                <div class="seat reserved">L7</div>
-            </div>
-            <div class="aisle"></div>
-            <div class="seats-right">
-                <div class="seat available">R8</div>
-                <div class="seat reserved">R9</div>
-                <div class="seat available">R10</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="seats-left">
-                <div class="seat available">L11</div>
-                <div class="seat reserved">L12</div>
-            </div>
-            <div class="aisle"></div>
-            <div class="seats-right">
-                <div class="seat available">R13</div>
-                <div class="seat reserved">R14</div>
-                <div class="seat available">R15</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="seats-left">
-                <div class="seat available">L16</div>
-                <div class="seat reserved">L17</div>
-            </div>
-            <div class="aisle"></div>
-            <div class="seats-right">
-                <div class="seat reserved">R18</div>
-                <div class="seat available">R19</div>
-                <div class="seat reserved">R20</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="seats-left">
-                <div class="seat available">L21</div>
-                <div class="seat reserved">L22</div>
-            </div>
-            <div class="aisle"></div>
-            <div class="seats-right">
-                <div class="seat available">R23</div>
-                <div class="seat reserved">R24</div>
-                <div class="seat available">R25</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="seats-left">
-                <div class="seat available">L26</div>
-                <div class="seat reserved">L27</div>
-            </div>
-            <div class="aisle"></div>
-            <div class="seats-right">
-                <div class="seat available">R28</div>
-                <div class="seat reserved">R29</div>
-                <div class="seat available">R30</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="seats-left">
-                <div class="seat available">L31</div>
-                <div class="seat reserved">L32</div>
-            </div>
-            <div class="aisle"></div>
-            <div class="seats-right">
-                <div class="seat available">R33</div>
-                <div class="seat reserved">R34</div>
-                <div class="seat available">R35</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="seats-left">
-                <div class="seat available">L36</div>
-                <div class="seat reserved">L37</div>
-            </div>
-            <div class="aisle"></div>
-            <div class="seats-right">
-                <div class="seat available">R38</div>
-                <div class="seat reserved">R39</div>
-                <div class="seat available">R40</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="seats-left">
-                <div class="seat available">L41</div>
-                <div class="seat reserved">L42</div>
-            </div>
-            <div class="aisle"></div>
-            <div class="seats-right">
-                <div class="seat available">R43</div>
-                <div class="seat reserved">R44</div>
-                <div class="seat available">R45</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="seats-left">
-                <div class="seat available">L46</div>
-                <div class="seat reserved">L47</div>
-            </div>
-            <div class="aisle"></div>
-            <div class="seats-right">
-                <div class="seat available">R48</div>
-                <div class="seat reserved">R49</div>
-                <div class="seat available">R50</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="seats-left">
-                <div class="seat available">L51</div>
-                <div class="seat reserved">L52</div>
-            </div>
-            <div class="aisle"></div>
-            <div class="seats-right">
-                <div class="seat available">R53</div>
-                <div class="seat reserved">R54</div>
-                <div class="seat available">R55</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="seats-left">
-                <div class="seat available">L56</div>
-                <div class="seat reserved">L57</div>
-            </div>
-            <div class="aisle"></div>
-            <div class="seats-right">
-                <div class="seat available">R58</div>
-                <div class="seat reserved">R59</div>
-                <div class="seat available">R60</div>
-            </div>
-        </div>
-
     </div>
+
+    <!-- Modal for notification -->
+    <div id="seatNotification" class="notification">
+        <p id="seatMessage"></p>
+    </div>
+
     <script src="reserve-seat.js"></script>
+    <script>
+        // Create the seat layout dynamically in JavaScript
+        document.addEventListener("DOMContentLoaded", function() {
+            const reservedSeats = <?php echo json_encode($reservedSeats); ?>;
+            const seatContainer = document.getElementById('seats-layout');
+            let seatCount = 1;
+
+            // Create 12 rows for 60 seats
+            for (let row = 0; row < 12; row++) { // 12 rows for 60 seats
+                let rowHTML = '<div class="row">';
+                for (let col = 0; col < 5; col++) {
+                    // Left seats (seat1, seat2, seat6, seat7, ...)
+                    const seatLabelLeft = "L" + seatCount;
+                    rowHTML += createSeatHTML(seatLabelLeft, reservedSeats);
+                    seatCount++;
+
+                    // Aisle in between
+                    if (col === 2) {
+                        rowHTML += '<div class="aisle"></div>';
+                    }
+
+                    // Right seats (seat3, seat4, seat8, seat9, ...)
+                    if (col === 4) {
+                        const seatLabelRight = "R" + (seatCount - 1);
+                        rowHTML += createSeatHTML(seatLabelRight, reservedSeats);
+                    }
+                }
+                rowHTML += '</div>';
+                seatContainer.innerHTML += rowHTML;
+            }
+        });
+
+        // Function to create the HTML for each seat (reserved or available)
+        function createSeatHTML(seatLabel, reservedSeats) {
+            const isReserved = reservedSeats.includes(seatLabel); // Check if seat is reserved
+            const seatClass = isReserved ? 'reserved' : 'available'; // Add the appropriate class for the seat
+            return `<div class="seat ${seatClass}" id="${seatLabel}">${seatLabel}</div>`;
+        }
+    </script>
 </body>
 </html>

@@ -12,45 +12,45 @@
             <img src="images/logo.jpeg" alt="App Logo" class="hex-logo">
         </div>
         <p class="welcome-text">Welcome to Our App</p>
-        <div class="org-structure">Organizational Structure</div>
+        <h2 class="org-structure">Organizational Structure</h2>
         <button class="next-button" onclick="window.location.href='intro.php'">Next</button>
     </section>
 
-    <div class="person-container">
+    <section class="person-container">
         <div class="person-card">
-            <img src="images/admin.png" alt="Person 1">
-            <h1>John Doe</h1>
-            <h2>CEO</h2>
-            <h3>John leads the company with a vision for innovative growth and excellence in every project.</h3>
+            <img src="images/KB.jpg" alt="John Doe">
+            <h1>Mr Matoko</h1>
+            <h2>Database Administrator</h2>
+            <p>Mr Matoko ensures the company's data systems are efficient, secure, and reliable. By managing databases, optimizing performance, and implementing backup solutions</p>
         </div>
 
         <div class="person-card">
-            <img src="images/admin.png" alt="Person 2">
-            <h1>Jane Smith</h1>
-            <h2>CTO</h2>
-            <h3>Jane ensures that our technological solutions are cutting-edge and forward-thinking.</h3>
+            <img src="images/Kamza.jpg" alt="Jane Smith">
+            <h1>Mr. Kgomommekoa</h1>
+            <h2>UI Designer</h2>
+            <p>Mr. Kgomommekoa designs clean and simple interfaces for the Stabus app  focusing on making the app easy to use, look good, and meet student needs.</p>
         </div>
 
         <div class="person-card">
-            <img src="images/admin.png" alt="Person 3">
-            <h1>Emily Johnson</h1>
-            <h2>CFO</h2>
-            <h3>Emily manages our financial strategy and ensures sustainable growth and profitability.</h3>
+            <img src="images/Martin.jpg" alt="Emily Johnson">
+            <h1>Mr. Khoza</h1>
+            <h2>Front End Developer</h2>
+            <p>Mr. Khoza builds clean, responsive interfaces for the bus service platform, ensuring users can easily book trips, check schedules, and navigate the system on any device.</p>
         </div>
 
         <div class="person-card">
-            <img src="images/admin.png" alt="Person 4">
-            <h1>Michael Lee</h1>
-            <h2>COO</h2>
-            <h3>Michael oversees the company's day-to-day operations, ensuring everything runs smoothly.</h3>
+            <img src="images/asim.jpg" alt="Michael Lee">
+            <h1>Mr. Mazibuko</h1>
+            <h2>Back End Developer</h2>
+            <p>Mr. Mazibuko handles server-side logic, database interactions, user authentication, and the implementation of real-time features such as notifications and bus tracking.</p>
         </div>
 
         <div class="person-card">
-            <img src="images/admin.png" alt="Person 5">
-            <h1>Amy Brown</h1>
-            <h2>CMO</h2>
-            <h3>Amy is responsible for crafting marketing strategies that bring our brand to life.</h3>
+            <img src="images/Mahex.jpg" alt="Amy Brown">
+            <h1>Mr. Mahelehele</h1>
+            <h2>DevOps Engineer</h2>
+            <p>Mr. Mahelehele handles automation and infrastructure for reliable deployments.</p>
         </div>
-    </div>
+    </section>
 </body>
 </html>

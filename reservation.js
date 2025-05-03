@@ -1,26 +1,78 @@
-document.addEventListener("DOMContentLoaded", function () {
-    setTimeout(() => {
-        document.querySelector(".splash").style.display = "none";
-        document.querySelector(".container").style.display = "block";
-    }, 2000);
-});
+document.addEventListener("DOMContentLoaded", () => {
+  const pickup = document.getElementById("pickup");
+  const destination = document.getElementById("destination");
+  const confirmation = document.getElementById("confirmation");
+  const dateInput = document.getElementById('reservation-date');
 
-document.getElementById("reservationForm").addEventListener("submit", function(event) {
-    event.preventDefault();
-    let name = document.getElementById("name").value;
-    let phone = document.getElementById("phone").value;
-    let pickup = document.getElementById("pickup").value;
-    let destination = document.getElementById("destination").value;
-    let date = document.getElementById("date").value;
-    let time = document.getElementById("time").value;
-    
-    if (name === "" || phone === "" || date === "" || time === "") {
-        alert("Please fill in all fields before confirming your reservation.");
-        return;
+  const destinationOptions = {
+    APK: ["SWC", "DFC", "APB"],
+    SWC: ["APK", "DFC", "APB"],
+    DFC: ["APK", "SWC", "APB"],
+    APB: ["APK", "SWC", "DFC"]
+  };
+
+  pickup.addEventListener("change", function () {
+    const selectedPickup = this.value;
+    destination.innerHTML = `<option value="" disabled selected>Select Destination</option>`;
+
+    if (destinationOptions[selectedPickup]) {
+      destinationOptions[selectedPickup].forEach(loc => {
+        const option = document.createElement("option");
+        option.value = loc;
+        option.textContent = loc;
+        destination.appendChild(option);
+      });
     }
-    
-    let confirmationMessage = `Reservation Confirmed!\nName: ${name}\nPhone: ${phone}\nDate: ${date}\nTime: ${time}\nPickup: ${pickup}\nDestination: ${destination}`;
-    alert(confirmationMessage);
-    
-    document.getElementById("reservationForm").reset();
+  });
+
+  const today = new Date();
+  const minDate = new Date(today);
+  minDate.setDate(today.getDate() + 1);
+  const maxDate = new Date(today);
+  maxDate.setDate(today.getDate() + 4);
+
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = (`0${date.getMonth() + 1}`).slice(-2);
+    const day = (`0${date.getDate()}`).slice(-2);
+    return `${year}-${month}-${day}`;
+  };
+
+  dateInput.min = formatDate(minDate);
+  dateInput.max = formatDate(maxDate);
+
+  document.getElementById("reservationForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const pickupLocation = pickup.value;
+    const destinationLocation = destination.value;
+
+    if (pickupLocation === destinationLocation) {
+      confirmation.textContent = "Departure and destination cannot be the same.";
+      confirmation.style.color = "red";
+      return;
+    }
+
+    const formData = new FormData(this);
+
+    fetch(window.location.href, {
+      method: "POST",
+      body: formData
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          confirmation.textContent = "Bus successfully booked! Redirecting to seat selection...";
+          confirmation.style.color = "green";
+          setTimeout(() => window.location.href = "reserve-seat.php", 2000);
+        } else {
+          confirmation.textContent = data.message || "Unable to book.";
+          confirmation.style.color = "red";
+        }
+      })
+      .catch(err => {
+        confirmation.textContent = "Unable to book due to network error.";
+        confirmation.style.color = "red";
+      });
+  });
 });

@@ -16,7 +16,7 @@
         .control-panel {
             padding: 20px;
             text-align: center;
-            background: hsl(275, 80%, 50%);
+            background: orange;
             color: white;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             font-size: 20px;
@@ -61,7 +61,7 @@
 <body>
 
 <div class="control-panel">
-    <label for="bus-select">🚌 Select Bus ID:</label>
+    <label for="bus-select">Select Bus To Track:</label>
     <select id="bus-select">
         <?php for ($i = 1; $i <= 10; $i++): ?>
             <option value="<?= $i ?>">Bus <?= $i ?></option>

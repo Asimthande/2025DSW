@@ -1,147 +1,92 @@
-* {
+body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f8f9fa;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: hsl(30, 30%, 95%);
+    color: #333;
 }
 
 .splash-screen {
     text-align: center;
-    padding: 20px;
-    max-width: 800px;
-    margin: auto;
+    padding: 40px 20px;
+    background-color: white;
+    border-bottom: 3px solid hsl(25, 80%, 60%);
 }
 
-.hex-logo {
-    width: 150px;
-    height: 150px;
-    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-    object-fit: cover;
+.logo-container img.hex-logo {
+    width: 120px;
+    height: auto;
+    border-radius: 12px;
     margin-bottom: 20px;
 }
 
 .welcome-text {
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    color: #343a40;
+    font-size: 1.5rem;
+    color: hsl(10, 90%, 50%);
+    margin-bottom: 10px;
 }
 
 .org-structure {
-    font-size: 18px;
-    font-weight: 500;
-    margin-bottom: 30px;
-    color: #6c757d;
+    font-size: 1.3rem;
+    color: hsl(290, 70%, 55%);
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
 .next-button {
-    background-color: #007bff;
+    background-color: hsl(10, 90%, 50%);
     color: white;
-    font-size: 16px;
-    padding: 10px 20px;
+    padding: 12px 24px;
+    font-size: 1rem;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    margin-top: 20px;
 }
 
 .next-button:hover {
-    background-color: #0056b3;
+    background-color: hsl(10, 90%, 45%);
 }
 
 .person-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
-    margin-top: 30px;
+    justify-content: center;
     gap: 20px;
+    padding: 30px 10px;
+    background-color: hsl(30, 30%, 95%);
 }
 
 .person-card {
     background-color: white;
+    border: 1px solid #ddd;
     border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 250px;
-    text-align: center;
+    width: 280px;
     padding: 20px;
-    transition: transform 0.3s ease;
-}
-
-.person-card:hover {
-    transform: translateY(-10px);
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
 
 .person-card img {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
-    margin-bottom: 15px;
+    object-fit: cover;
 }
 
 .person-card h1 {
-    font-size: 20px;
-    font-weight: 600;
-    color: #343a40;
-    margin-bottom: 5px;
+    font-size: 1.3rem;
+    margin: 10px 0 5px;
+    color: hsl(10, 90%, 50%);
 }
 
 .person-card h2 {
-    font-size: 16px;
-    font-weight: 500;
-    color: #6c757d;
-    margin-bottom: 10px;
+    font-size: 1rem;
+    margin: 0 0 10px;
+    color: hsl(290, 70%, 55%);
 }
 
-.person-card h3 {
-    font-size: 14px;
-    color: #495057;
-}
-
-@media (max-width: 768px) {
-    .splash-screen {
-        padding: 15px;
-    }
-
-    .hex-logo {
-        width: 120px;
-        height: 120px;
-    }
-
-    .welcome-text {
-        font-size: 20px;
-    }
-
-    .org-structure {
-        font-size: 16px;
-    }
-
-    .person-container {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .person-card {
-        width: 200px;
-    }
-}
-
-@media (max-width: 576px) {
-    .person-card {
-        width: 100%;
-        margin-bottom: 20px;
-    }
-
-    .next-button {
-        width: 100%;
-        padding: 12px;
-    }
+.person-card p {
+    font-size: 0.95rem;
+    color: #555;
 }

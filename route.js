@@ -1,9 +1,14 @@
-document.getElementById('table-view-btn').addEventListener('click', function() {
-    document.getElementById('table-view').style.display = 'block';
-    document.getElementById('picture-view').style.display = 'none';
-});
+document.addEventListener("DOMContentLoaded", () => {
+  const tableView = document.getElementById("table-view");
+  const pictureView = document.getElementById("picture-view");
 
-document.getElementById('picture-view-btn').addEventListener('click', function() {
-    document.getElementById('table-view').style.display = 'none';
-    document.getElementById('picture-view').style.display = 'block';
+  document.getElementById("table-view-btn").addEventListener("click", () => {
+    tableView.style.display = "block";
+    pictureView.style.display = "none";
+  });
+
+  document.getElementById("picture-view-btn").addEventListener("click", () => {
+    tableView.style.display = "none";
+    pictureView.style.display = "block";
+  });
 });

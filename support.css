@@ -1,30 +1,27 @@
-/* support.css */
-
-/* General Styling */
 body {
-    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: hsl(30, 30%, 95%);
+    color: #333;
 }
 
 .container {
     max-width: 800px;
-    margin: 30px auto;
+    margin: 40px auto;
     padding: 20px;
-    background-color: #fff;
+    background: white;
     border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
-h1 {
+h1, h2 {
     text-align: center;
-    margin-bottom: 20px;
+    color: hsl(10, 90%, 50%);
 }
 
-/* FAQs Section */
-#faqs {
-    margin-bottom: 40px;
+section {
+    margin-top: 30px;
 }
 
 .faq {
@@ -32,29 +29,29 @@ h1 {
 }
 
 .faq-question {
-    display: block;
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    border: none;
-    text-align: left;
     width: 100%;
+    padding: 15px;
+    font-size: 1rem;
+    background-color: hsl(25, 80%, 60%);
+    color: white;
+    border: none;
     border-radius: 5px;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.faq-question:hover {
+    background-color: hsl(25, 80%, 55%);
 }
 
 .faq-answer {
     display: none;
+    padding: 10px 15px;
     background-color: #f9f9f9;
-    padding: 10px;
+    border-left: 4px solid hsl(290, 70%, 55%);
     margin-top: 5px;
-    border-radius: 5px;
-}
-
-/* Support Section */
-#support {
-    margin-top: 40px;
+    border-radius: 4px;
 }
 
 form {
@@ -64,34 +61,27 @@ form {
 
 form label {
     margin: 10px 0 5px;
+    font-weight: bold;
 }
 
-form input, form textarea, form button {
+form input, form textarea {
     padding: 10px;
-    margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
-form button {
-    background-color: #4CAF50;
+.submit-btn {
+    margin-top: 15px;
+    padding: 12px;
+    background-color: hsl(290, 70%, 55%);
     color: white;
-    cursor: pointer;
     border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-form button:hover {
-    background-color: #45a049;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .container {
-        width: 100%;
-        padding: 15px;
-    }
-
-    form input, form textarea, form button {
-        font-size: 14px;
-    }
+.submit-btn:hover {
+    background-color: hsl(290, 70%, 50%);
 }

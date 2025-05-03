@@ -98,10 +98,19 @@ $role = $_SESSION['role'];
         </section>
     </div>
 
-    <aside class="right-panel" id="right-panel">
+<aside class="right-panel" id="right-panel" style="height: 100vh; overflow-y: auto;">
         <h3>Notifications</h3>
         <ul id="alerts">
-            <li>No new alerts</li>
+        <script>
+setInterval(function() {
+    fetch('dashboard-content.php')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('alerts').innerHTML = data;
+        });
+}, 20000);
+</script>
+            <li>Loading Notifications...</li>
         </ul>
         <h3>Weather</h3>
         <div id="weather-container">

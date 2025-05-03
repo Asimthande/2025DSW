@@ -1,63 +1,102 @@
 <?php
-// Start the session
 session_start();
 
-// Check if the user is authenticated
 if (!isset($_SESSION['user_id'])) {
-    // If not authenticated, redirect to the login page
     header("Location: signin.php");
     exit();
 }
 
-// Check if the user has the appropriate role (only allow students)
 if ($_SESSION['role'] !== 'student') {
-    // If the user is not a student, redirect to the dashboard or another page
     header("Location: dashboard.php");
     exit();
 }
 
-// Fetch user details from the session
 $first_name = $_SESSION['first_name'];
 $last_name = $_SESSION['last_name'];
 $email = $_SESSION['email'];
+$student_number = $_SESSION['student_number'];
+
+// Include the database connection
+include('partial/connect.php');
+
+// Default to fetching from tblNotifications
+$sortBy = isset($_GET['sort']) ? $_GET['sort'] : 'newest';
+
+// Fetch notifications based on selected sort order
+$sql = "SELECT student_number, message, timestamp, status 
+        FROM tblNotifications 
+        WHERE student_number = ? 
+        ORDER BY timestamp DESC";
+
+if ($sortBy === 'oldest') {
+    $sql = "SELECT student_number, message, timestamp, status 
+            FROM tblNotifications 
+            WHERE student_number = ? 
+            ORDER BY timestamp ASC";
+} elseif ($sortBy === 'name') {
+    $sql = "SELECT student_number, message, timestamp, status 
+            FROM tblNotifications 
+            WHERE student_number = ? 
+            ORDER BY message ASC";
+}
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('s', $student_number); 
+$stmt->execute();
+$result = $stmt->get_result();
+
+$notifications = [];
+while ($row = $result->fetch_assoc()) {
+    $notifications[] = $row;
+}
+
+$stmt->close();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notification Center</title>
-  <link rel="stylesheet" href="notifications.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Center</title>
+    <link rel="stylesheet" href="notifications.css">
 </head>
 <body>
-  <div class="notification-center">
-    <h2>Notification Center</h2>
-    <div class="filters">
-      <div class="dropdown">
-        <label for="order-select">Sort Notifications:</label>
-        <select id="order-select">
-          <option value="newest">Newest First</option>
-          <option value="oldest">Oldest First</option>
-          <option value="name">By Name</option>
-        </select>
-      </div>
-      <div class="dropdown">
-        <label for="group-select">Group Notifications:</label>
-        <select id="group-select">
-          <option value="none">None</option>
-          <option value="category">By Category</option>
-        </select>
-      </div>
+    <div class="notification-center">
+        <h2>Notification Center</h2>
+
+        <!-- Sort Notifications -->
+        <div class="filters">
+            <div class="dropdown">
+                <label for="order-select">Sort Notifications:</label>
+                <select id="order-select" onchange="location.href = '?sort=' + this.value;">
+                    <option value="newest" <?= $sortBy === 'newest' ? 'selected' : '' ?>>Newest First</option>
+                    <option value="oldest" <?= $sortBy === 'oldest' ? 'selected' : '' ?>>Oldest First</option>
+                    <option value="name" <?= $sortBy === 'name' ? 'selected' : '' ?>>By Message</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Notifications List -->
+        <div class="notifications-list">
+            <ul id="notifications-list">
+                <?php if (empty($notifications)): ?>
+                    <li>No new notifications</li>
+                <?php else: ?>
+                    <?php foreach ($notifications as $notification): ?>
+                        <li class="notification <?= $notification['status'] == 0 ? 'unread' : 'read'; ?>" id="notification-<?= $notification['student_number']; ?>">
+                            <strong>Message:</strong> <?= htmlspecialchars($notification['message']); ?><br>
+                            <strong>Time:</strong> <?= date('Y-m-d H:i:s', strtotime($notification['timestamp'])); ?><br>
+                            <button class="mark-as-read" onclick="markAsRead(<?= $notification['student_number']; ?>)">
+                                <?= $notification['status'] == 0 ? 'Mark as Read' : 'Already Read'; ?>
+                            </button>
+                        </li>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </ul>
+        </div>
     </div>
-    <div class="notifications-list">
-      <ul id="notifications-list">
-        <li class="group">General</li>
-        <li>Notification 1: Sample Notification 1</li>
-        <li>Notification 2: Sample Notification 2</li>
-      </ul>
-    </div>
-  </div>
-  <script src="Notification.js"></script>
+
+    <script src="notifications.js"></script>
 </body>
 </html>

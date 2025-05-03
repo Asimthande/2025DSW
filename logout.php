@@ -1,16 +1,7 @@
 <?php
-// Start the session
 session_start();
-
-// Destroy all session variables
 session_unset();
-
-// Destroy the session
 session_destroy();
-
-// Redirect to the splash page after logging out
-header("Location: splash.php");
-exit();
 ?>
 
 <!DOCTYPE html>
@@ -28,8 +19,8 @@ exit();
     <p>We're sorry to see you go. Would you like to return to the homepage or log in again?</p>
 
     <div class="buttons">
-        <a href="" onclick="window.location.href='splash.php'"><button id="home-btn" class="btn">Go to Homepage</button></a>
-        <a href="" onclick="window.location.href='signin.php'"><button id="login-btn" class="btn">Log In Again</button></a>
+        <a href="splash.php"><button class="btn">Go to Homepage</button></a>
+        <a href="signin.php"><button class="btn">Log In Again</button></a>
     </div>
 
     <div id="fun-message" class="fun-message"></div>

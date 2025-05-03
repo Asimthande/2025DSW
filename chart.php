@@ -8,85 +8,88 @@ if (!isset($_SESSION["role"]) || !in_array($_SESSION["role"], ['admin', 'driver'
 
 include 'partial/connect.php';
 
-$busID1 = isset($_GET['busID1']) ? intval($_GET['busID1']) : 1;
-$busID2 = isset($_GET['busID2']) ? intval($_GET['busID2']) : null;
+$chartType = isset($_GET['chartType']) ? $_GET['chartType'] : 'bus_requests';
 $range = isset($_GET['range']) ? $_GET['range'] : 'daily';
-$chartType = isset($_GET['chart']) ? $_GET['chart'] : 'bar';
 
-$busIDs = [$busID1];
-if ($busID2 && $busID2 !== $busID1) {
-    $busIDs[] = $busID2;
-}
-
+// Date filter based on selected range
 switch ($range) {
     case 'weekly':
-        $dateFilter = "UpdateTime >= DATE_SUB(NOW(), INTERVAL 7 DAY)";
+        $dateFilter = "booking_time >= DATE_SUB(NOW(), INTERVAL 7 DAY)";
         break;
     case 'monthly':
-        $dateFilter = "UpdateTime >= DATE_SUB(NOW(), INTERVAL 1 MONTH)";
+        $dateFilter = "booking_time >= DATE_SUB(NOW(), INTERVAL 1 MONTH)";
         break;
     default:
-        $dateFilter = "DATE(UpdateTime) = CURDATE()";
+        $dateFilter = "DATE(booking_time) = CURDATE()";
 }
 
 $data = [];
 
-foreach ($busIDs as $busID) {
-    $sql = "SELECT HOUR(UpdateTime) as hour, COUNT(*) as count 
-            FROM location_history 
-            WHERE BusID = ? AND $dateFilter 
-            GROUP BY hour";
+if ($chartType === 'bus_requests') {
+    $sql = "SELECT bus_id, COUNT(*) as count 
+            FROM tblBookings 
+            WHERE $dateFilter 
+            GROUP BY bus_id 
+            ORDER BY count DESC";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $busID);
     $stmt->execute();
     $result = $stmt->get_result();
-    $counts = array_fill(0, 24, 0);
     while ($row = $result->fetch_assoc()) {
-        $counts[intval($row['hour'])] = intval($row['count']);
+        $data[$row['bus_id']] = $row['count'];
     }
-    $data["Bus $busID"] = $counts;
+    $stmt->close();
+} elseif ($chartType === 'booking_hours') {
+    $sql = "SELECT HOUR(booking_time) as hour, COUNT(*) as count 
+            FROM tblBookings 
+            WHERE $dateFilter 
+            GROUP BY hour 
+            ORDER BY hour ASC";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $data = array_fill(0, 24, 0);
+    while ($row = $result->fetch_assoc()) {
+        $data[intval($row['hour'])] = intval($row['count']);
+    }
     $stmt->close();
 }
 
-$totalHourlyCounts = array_fill(0, 24, 0);
-foreach ($data as $busData) {
-    foreach ($busData as $hour => $count) {
-        $totalHourlyCounts[$hour] += $count;
-    }
+$busiestHour = null;
+if ($chartType === 'booking_hours') {
+    $busiestHour = array_keys($data, max($data))[0];
 }
-$busiestHour = array_keys($totalHourlyCounts, max($totalHourlyCounts))[0];
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Bus Tracking Chart</title>
+    <title>UJ Stabus Booking Analytics</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             font-family: "Segoe UI", sans-serif;
             padding: 20px;
             margin: 0;
-            background: hsl(30, 30%, 95%);
+            background: #f4f4f4;
         }
 
-        h1, h2 {
+        h1 {
             text-align: center;
-            color: hsl(10, 90%, 50%);
+            color: #d9534f;
         }
 
         form {
             margin: 20px auto;
             text-align: center;
-            background: hsl(275, 80%, 50%);
+            background-color: orange;
             padding: 15px;
             border-radius: 10px;
             color: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        select, input, button {
+        select, button {
             padding: 12px;
             margin: 5px;
             font-size: 16px;
@@ -97,15 +100,16 @@ $busiestHour = array_keys($totalHourlyCounts, max($totalHourlyCounts))[0];
 
         select {
             background: white;
-            color: hsl(275, 80%, 50%);
+            color: #5bc0de;
             font-weight: bold;
         }
 
         button {
-            background: hsl(10, 90%, 50%);
-            color: white;
+            background: rgb(184,227,233);
+            color: black;
             font-weight: bold;
             cursor: pointer;
+            box-shadow:0 0 10px black;
         }
 
         #chart-container {
@@ -113,7 +117,7 @@ $busiestHour = array_keys($totalHourlyCounts, max($totalHourlyCounts))[0];
             max-width: 1000px;
             margin: auto;
             background: white;
-            padding: 15px;
+            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
@@ -127,22 +131,23 @@ $busiestHour = array_keys($totalHourlyCounts, max($totalHourlyCounts))[0];
             text-align: center;
             margin-top: 10px;
             font-size: 18px;
-            color: hsl(275, 80%, 50%);
+            color: #5bc0de;
             font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-<h1>UJ Stabus: Bus Tracking Report</h1>
+<h1>UJ Stabus: Booking Analytics</h1>
 
 <form method="GET" action="chart.php">
-    <label>Bus ID 1:
-        <input type="number" name="busID1" value="<?= $busID1 ?>" required>
+    <label>Chart Type:
+        <select name="chartType">
+            <option value="bus_requests" <?= $chartType == 'bus_requests' ? 'selected' : '' ?>>Most Requested Buses</option>
+            <option value="booking_hours" <?= $chartType == 'booking_hours' ? 'selected' : '' ?>>Busiest Booking Hours</option>
+        </select>
     </label>
-    <label>Bus ID 2:
-        <input type="number" name="busID2" value="<?= $busID2 ?? '' ?>">
-    </label>
+
     <label>Range:
         <select name="range">
             <option value="daily" <?= $range == 'daily' ? 'selected' : '' ?>>Daily</option>
@@ -150,85 +155,74 @@ $busiestHour = array_keys($totalHourlyCounts, max($totalHourlyCounts))[0];
             <option value="monthly" <?= $range == 'monthly' ? 'selected' : '' ?>>Monthly</option>
         </select>
     </label>
-    <label>Chart Type:
-        <select name="chart">
-            <option value="bar" <?= $chartType == 'bar' ? 'selected' : '' ?>>Bar</option>
-            <option value="line" <?= $chartType == 'line' ? 'selected' : '' ?>>Line</option>
-            <option value="pie" <?= $chartType == 'pie' ? 'selected' : '' ?>>Pie</option>
-            <option value="horizontal-bar" <?= $chartType == 'horizontal-bar' ? 'selected' : '' ?>>Horizontal Bar</option>
-        </select>
-    </label>
+
     <button type="submit">Update Chart</button>
 </form>
 
 <div id="chart-container">
-    <canvas id="busChart"></canvas>
+    <canvas id="bookingChart"></canvas>
 </div>
 
-<div class="info">
-    Busiest hour of the day: <strong><?= $busiestHour ?>:00</strong>
-</div>
+<?php if ($chartType === 'booking_hours'): ?>
+    <div class="info">
+        Busiest hour: <strong><?= $busiestHour ?>:00</strong>
+    </div>
+<?php endif; ?>
 
 <script>
     const chartType = "<?= $chartType ?>";
     const chartData = <?= json_encode($data) ?>;
-    const labels = Array.from({length: 24}, (_, i) => `${i}:00`);
 
-    const datasets = Object.keys(chartData).map((bus, index) => {
-        const colors = ['hsl(10, 90%, 50%)', 'hsl(290, 70%, 55%)', 'hsl(25, 80%, 60%)', 'hsl(200, 80%, 50%)'];
-        const borderColors = ['hsl(10, 80%, 40%)', 'hsl(290, 60%, 45%)', 'hsl(25, 70%, 50%)', 'hsl(200, 70%, 40%)'];
+    let labels = [];
+    let dataPoints = [];
 
-        const background = colors[index % colors.length];
-        const border = borderColors[index % borderColors.length];
+    if (chartType === 'bus_requests') {
+        labels = Object.keys(chartData).map(busId => `Bus ${busId}`);
+        dataPoints = Object.values(chartData);
+    } else if (chartType === 'booking_hours') {
+        labels = Array.from({length: 24}, (_, i) => `${i}:00`);
+        dataPoints = labels.map(hour => chartData[parseInt(hour)] ?? 0);
+    }
 
-        const dataPoints = labels.map(hour => chartData[bus][parseInt(hour)] ?? 0);
-
-        return {
-            label: bus,
-            data: dataPoints,
-            backgroundColor: chartType === 'pie' ? colors : background,
-            borderColor: border,
-            borderWidth: 2,
-            type: chartType === 'horizontal-bar' ? 'bar' : chartType,
-            fill: chartType !== 'line',
-        };
-    });
-
-    const ctx = document.getElementById('busChart').getContext('2d');
+    const ctx = document.getElementById('bookingChart').getContext('2d');
     new Chart(ctx, {
-        type: chartType === 'horizontal-bar' ? 'bar' : chartType,
+        type: 'bar',
         data: {
             labels: labels,
-            datasets: datasets
+            datasets: [{
+                label: chartType === 'bus_requests' ? 'Number of Bookings' : 'Bookings per Hour',
+                data: dataPoints,
+                backgroundColor: 'hsl(10, 90%, 60%)',
+                borderColor: 'hsl(10, 80%, 40%)',
+                borderWidth: 2
+            }]
         },
         options: {
             responsive: true,
-            indexAxis: chartType === 'horizontal-bar' ? 'y' : 'x',
             plugins: {
                 title: {
                     display: true,
-                    text: 'Bus Requests per Hour'
+                    text: chartType === 'bus_requests' ? 'Most Requested Buses' : 'Busiest Booking Hours'
                 },
                 legend: {
-                    display: true,
-                    position: 'bottom'
+                    display: false
                 }
             },
-            scales: chartType !== 'pie' ? {
+            scales: {
                 y: {
                     beginAtZero: true,
                     title: {
                         display: true,
-                        text: 'Number of Requests'
+                        text: 'Number of Bookings'
                     }
                 },
                 x: {
                     title: {
                         display: true,
-                        text: 'Hour of Day'
+                        text: chartType === 'bus_requests' ? 'Bus ID' : 'Hour of Day'
                     }
                 }
-            } : {}
+            }
         }
     });
 </script>
