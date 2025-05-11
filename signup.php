@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta charset="UTF-8">
   <title>Sign Up</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="signup.css">
+  <link rel="stylesheet" href="signin.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -64,8 +64,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <h2>Welcome to UJ Bus Tracker</h2>
       <p>Track your campus bus in real-time. Sign up to get started!</p>
       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXjKYvyZjXDmVdD1nZVX7uhjqRR3LGDIMHOQ&s" alt="Bus Illustration" class="bus-img">
-      
-        <p class="login-link"><a href="dashboard.php?role='guest'" >Login as Guest</a></p>
+      <form method="get">
+        <p class="login-link"><a href="dashboard.php?role='guest'" name="guest" >Login as Guest</a></p>
+        </form>
+        <?php
+        if(isset($_GET['guest'])){
+            session_start();
+            $_SESSION['role']='guest';
+            $_SESSION['name']='guest';
+            $_SESSION['surname']='guest';
+            $_SESSION['studentnumber']='99';
+        }
+        ?>
     </div>
     <div class="signup-right">
       <form class="signup-form" method="POST" autocomplete="off">

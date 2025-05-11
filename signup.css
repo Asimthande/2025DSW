@@ -25,7 +25,6 @@ body {
   overflow: hidden;
   max-width: 850px;
   width: 100%;
-  height: 90vh;
 }
 
 /* Left Panel */
@@ -244,18 +243,20 @@ body {
   text-align: center;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
+    body{
+        overflow-y: scroll;
+    }
   .signup-container {
     flex-direction: column;
     height: auto;
     max-height: 95vh;
-    overflow-y: auto;
   }
 
   .signup-left,
   .signup-right {
     padding: 24px;
+    overflow-y: scroll;
   }
 
   .signup-form {

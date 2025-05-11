@@ -1,5 +1,7 @@
 <?php
 session_start();
+require_once __DIR__.'/vendor/autoload.php';
+require_once __DIR__.'/config.php';
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: signin.php");
@@ -55,19 +57,66 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $bookingId = $bookingStmt->insert_id;
         $_SESSION['booking_id'] = $bookingId;
 
-        // Also insert into tblNotifications
-        $timestamp = date('Y-m-d H:i:s');
-        $status = "unread";
-        $message = "Dear $studentName, you have successfully reserved Bus $busId for $date at $hour:00 from $pickup to $destination.";
+       $timestamp = date('Y-m-d H:i:s');
+$status = "unread";
+$message = "Dear $studentName, you have successfully reserved Bus $busId for $date at $hour:00 from $pickup to $destination.";
 
-        $notifStmt = $conn->prepare("INSERT INTO tblNotifications (student_number, message, timestamp, status) VALUES (?, ?, ?, ?)");
-        $notifStmt->bind_param("ssss", $studentNumber, $message, $timestamp, $status);
-        $notifStmt->execute();
-        $notifStmt->close();
+// Insert into notifications
+$notifStmt = $conn->prepare("INSERT INTO tblNotifications (student_number, message, timestamp, status) VALUES (?, ?, ?, ?)");
+$notifStmt->bind_param("ssss", $studentNumber, $message, $timestamp, $status);
+$notifStmt->execute();
+$notifStmt->close();
 
-        echo json_encode(['status' => 'success']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Failed to book the bus.']);
+// Send reservation email
+require_once __DIR__.'/vendor/autoload.php';
+require_once __DIR__.'/config.php';
+
+$receiverEmail = $_SESSION['email'];
+$receiverName = $studentName;
+
+$mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+try {
+    $mail->setLanguage(CONTACTFORM_LANGUAGE);
+    $mail->SMTPDebug = CONTACTFORM_PHPMAILER_DEBUG_LEVEL;
+    $mail->isSMTP();
+    $mail->Host = CONTACTFORM_SMTP_HOSTNAME;
+    $mail->SMTPAuth = true;
+    $mail->Username = CONTACTFORM_SMTP_USERNAME;
+    $mail->Password = CONTACTFORM_SMTP_PASSWORD;
+    $mail->SMTPSecure = CONTACTFORM_SMTP_ENCRYPTION;
+    $mail->Port = CONTACTFORM_SMTP_PORT;
+    $mail->CharSet = CONTACTFORM_MAIL_CHARSET;
+    $mail->Encoding = CONTACTFORM_MAIL_ENCODING;
+
+    $mail->setFrom(CONTACTFORM_FROM_ADDRESS, CONTACTFORM_FROM_NAME);
+    $mail->addAddress($receiverEmail, $receiverName);
+    $mail->addReplyTo(CONTACTFORM_FROM_ADDRESS, CONTACTFORM_FROM_NAME);
+
+    $mail->isHTML(true);
+    $mail->Subject = "UJ STABUS Reservation Confirmation";
+    $mail->Body = '
+    <div style="background-color: #f0f8ff; padding: 20px; font-family: Arial, sans-serif; text-align: center;">
+        <h2 style="color: #333;">Hello ' . $receiverName . ',</h2>
+        <p style="font-size: 16px; color: #333;">You have successfully reserved a bus seat.</p>
+        <p style="font-size: 16px; color: #333;"><strong>Reservation Details:</strong></p>
+        <ul style="list-style: none; padding: 0; font-size: 16px; color: #333;">
+            <li><strong>Bus ID:</strong> ' . $busId . '</li>
+            <li><strong>Date:</strong> ' . $date . '</li>
+            <li><strong>Time:</strong> ' . $hour . ':00</li>
+            <li><strong>Pick-up:</strong> ' . $pickup . '</li>
+            <li><strong>Destination:</strong> ' . $destination . '</li>
+        </ul>
+        <p style="font-size: 14px; color: #666;">Thank you for using UJ STABUS!</p>
+    </div>';
+
+    $mail->send();
+} catch (Exception $e) {
+    error_log("Reservation email failed: " . $mail->ErrorInfo);
+    // Don’t show to user, just log
+}
+
+echo json_encode(['status' => 'success']);
+
     }
 
     $bookingStmt->close();

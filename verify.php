@@ -1,177 +1,130 @@
 <?php
 session_start();
-require_once "partial/connect.php";
+require_once __DIR__.'/vendor/autoload.php';
+require_once __DIR__.'/functions.php';
+require_once __DIR__.'/config.php';
+require_once __DIR__.'/partial/connect.php'; // Include the database connection
 
-// Include PHPMailer files from the 'mail' folder
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require 'mail/src/PHPMailer.php';
-require 'mail/src/Exception.php';
-require 'mail/src/SMTP.php';
-
-// Check if user is logged in
-if (!isset($_SESSION['student_number'])) {
-    die("Unauthorized access: No student number found in session.");
+// Ensure user is logged in and session has email, name, and student_number
+if (!isset($_SESSION['email'], $_SESSION['first_name'], $_SESSION['student_number'])) {
+    die("Session not initialized. Please log in.");
 }
 
-$student_number = $_SESSION['student_number'];
+$receiverEmail = $_SESSION['email'];
+$receiverName = $_SESSION['first_name'] . ' ' . ($_SESSION['last_name'] ?? '');
 
-// Fetch student email
-$email_stmt = $conn->prepare("SELECT email FROM Students WHERE studentNumber = ?");
-$email_stmt->bind_param("s", $student_number);
-$email_stmt->execute();
-$email_stmt->bind_result($email);
-$email_stmt->fetch();
-$email_stmt->close();
+// Generate the verification code only once
+if (!isset($_SESSION['verification_code'])) {
+    $verificationCode = rand(100000, 999999);
+    $_SESSION['verification_code'] = strval($verificationCode);
 
-if (empty($email)) {
-    die("Error: No email found for the student.");
-}
-
-// Function to send the verification code using PHPMailer with Gmail SMTP
-function sendVerificationCode($email, $code) {
-    $subject = "UJ iTrack Verification Code";
-    $message = "Hello,\n\nYour UJ iTrack verification code is: $code\n\nIf you did not request this, please ignore this message.";
-
-    // Create PHPMailer instance
-    $mail = new PHPMailer(true);
+    // Send the verification code to the user
+    $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
     try {
-        // Server settings
-        $mail->isSMTP();                                           // Set mailer to use SMTP
-        $mail->Host = 'smtp.gmail.com';                             // Set the SMTP server to Gmail
-        $mail->SMTPAuth = true;                                     // Enable SMTP authentication
-        $mail->Username = 'strikersavings@gmail.com';               // SMTP username (your Gmail address)
-        $mail->Password = 'cdrc aetb yehj woqj';                    // SMTP password (your Gmail password or App Password)
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption
-        $mail->Port = 587;                                          // TCP port to connect to
+        // SMTP settings
+        $mail->setLanguage(CONTACTFORM_LANGUAGE);
+        $mail->SMTPDebug = CONTACTFORM_PHPMAILER_DEBUG_LEVEL;
+        $mail->isSMTP();
+        $mail->Host = CONTACTFORM_SMTP_HOSTNAME;
+        $mail->SMTPAuth = true;
+        $mail->Username = CONTACTFORM_SMTP_USERNAME;
+        $mail->Password = CONTACTFORM_SMTP_PASSWORD;
+        $mail->SMTPSecure = CONTACTFORM_SMTP_ENCRYPTION;
+        $mail->Port = CONTACTFORM_SMTP_PORT;
+        $mail->CharSet = CONTACTFORM_MAIL_CHARSET;
+        $mail->Encoding = CONTACTFORM_MAIL_ENCODING;
 
         // Recipients
-        $mail->setFrom('strikersavings@gmail.com', 'UJ iTrack');    // Set the "From" email address
-        $mail->addAddress($email);                                  // Add recipient email
+        $mail->setFrom(CONTACTFORM_FROM_ADDRESS, CONTACTFORM_FROM_NAME);
+        $mail->addAddress($receiverEmail, $receiverName);
+        $mail->addReplyTo(CONTACTFORM_FROM_ADDRESS, CONTACTFORM_FROM_NAME);
 
         // Content
-        $mail->isHTML(false);                                       // Set email format to plain text
-        $mail->Subject = $subject;
-        $mail->Body    = $message;
+        $mail->Subject = "Your Verification Code";
+        $mail->isHTML(true);  // This ensures the email content is treated as HTML
+        $mail->Body = '
+<div style="background-color: #f5f5dc; padding: 20px; font-family: Arial, sans-serif; text-align: center;">
+    <img src="https://via.placeholder.com/600x200.png?text=Welcome" alt="Welcome" style="width: 100%; max-width: 600px; border-radius: 10px;">
 
-        // Send the email
+    <p style="font-size: 18px; color: #333; margin-top: 20px;">Dear ' . $receiverName . ',</p>
+
+    <p style="font-size: 18px; color: #333;">Your verification code is: 
+        <span style="color: orange; font-weight: bold; font-size: 22px;">' . $verificationCode . '</span>
+    </p>
+
+    <p style="font-size: 16px; color: #333;">Please enter this code to verify your account.</p>
+
+    <p style="font-size: 16px; color: #333;">Regards,<br>Your Team</p>
+</div>';
+
+
         $mail->send();
-        return true;
     } catch (Exception $e) {
-        // Error handling
-        error_log("PHPMailer Error: " . $mail->ErrorInfo);
-        return false;
+        echo "Email sending failed: " . $mail->ErrorInfo;
+        exit;
     }
 }
 
-// Generate or resend code
-if (!isset($_SESSION['verification_code']) || isset($_GET['resend'])) {
-    $code = mt_rand(100000, 999999);
-    $_SESSION['verification_code'] = $code;
+// Check if the verification code is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $userCode = $_POST['verification_code'];
 
-    if (!sendVerificationCode($email, $code)) {
-        echo "<script>alert('Failed to send verification code.');</script>";
-    } elseif (isset($_GET['resend'])) {
-        echo "<script>alert('Verification code resent.');</script>";
-    }
-}
+    // Verify if the submitted code matches the one sent
+    if ($userCode === $_SESSION['verification_code']) {
+        // Update user verification status in the database using student_number from the session
+        $studentNumber = $_SESSION['student_number'];
 
-// Handle verification
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['verification_code'])) {
-    $user_code = trim($_POST['verification_code']);
+        // Prepare and bind the update query using mysqli (from connect.php)
+        $sql = "UPDATE `Students` SET `state` = 1 WHERE `StudentNumber` = ?";
+        
+        // Prepare statement
+        if ($stmt = $conn->prepare($sql)) {
+            // Bind parameters (i for integer)
+            $stmt->bind_param("i", $studentNumber);
 
-    if (!preg_match('/^\d{6}$/', $user_code)) {
-        echo "<script>alert('Invalid format. Please enter a 6-digit code.');</script>";
-    } elseif ($user_code == $_SESSION['verification_code']) {
-        $update_stmt = $conn->prepare("UPDATE Students SET state = 1 WHERE studentNumber = ?");
-        $update_stmt->bind_param("s", $student_number);
-        $update_stmt->execute();
+            // Execute the statement
+            if ($stmt->execute()) {
+                // Redirect to dashboard if verification is successful
+                header("Location: dashboard.php");
+                exit;
+            } else {
+                echo "Error executing query: " . $stmt->error;
+            }
 
-        if ($update_stmt->affected_rows > 0) {
-            unset($_SESSION['verification_code']);
-            echo "<script>alert('Verification successful!'); window.location.href='dashboard.php';</script>";
-            exit;
+            // Close the statement
+            $stmt->close();
         } else {
-            echo "<script>alert('Code matched, but failed to update account.');</script>";
+            echo "Error preparing the statement: " . $conn->error;
         }
-
-        $update_stmt->close();
     } else {
-        echo "<script>alert('Invalid verification code. Please try again.');</script>";
+        $errorMessage = "Invalid verification code. Please try again.";
     }
 }
 ?>
 
-<!-- HTML -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Verify Account</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: sans-serif;
-            background-color: #f9f9f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .verification-screen {
-            background: white;
-            padding: 2rem 3rem;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        input[type="text"] {
-            padding: 10px;
-            width: 100%;
-            margin: 1rem 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        button {
-            background-color: #0066cc;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 0.5rem;
-        }
-
-        button:hover {
-            background-color: #004999;
-        }
-
-        form {
-            margin-bottom: 1rem;
-        }
-
-        p {
-            margin-bottom: 1rem;
-        }
-    </style>
+    <title>Verify Email</title>
+    <link rel="stylesheet" href="verify.css">
 </head>
 <body>
-    <section class="verification-screen">
-        <h2>Verify Your Account</h2>
-        <p>A verification code was sent to: <strong><?= htmlspecialchars($email); ?></strong></p>
 
-        <form method="post">
-            <input type="text" name="verification_code" placeholder="Enter 6-digit Verification Code" required>
-            <button type="submit">Verify</button>
-        </form>
+<div class="container">
+    <h2>Verify Your Email</h2>
+    <p>A verification code has been sent to your email address. Please enter the code below to verify your account.</p>
 
-        <form method="get">
-            <button type="submit" name="resend" value="1">Resend Code</button>
-        </form>
-    </section>
+    <form method="POST" class="verification-form">
+        <input type="text" name="verification_code" placeholder="Enter Verification Code" required>
+        <button type="submit" class="verify-btn">Verify</button>
+    </form>
+
+    <?php if (isset($errorMessage)): ?>
+        <p class="error-message"><?= $errorMessage ?></p>
+    <?php endif; ?>
+</div>
+
 </body>
 </html>

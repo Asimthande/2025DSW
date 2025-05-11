@@ -131,6 +131,6 @@
         fetchLocation(true)
     })
 </script>
-
+<script src="language.js"></script>
 </body>
 </html>

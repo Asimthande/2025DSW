@@ -1,82 +1,98 @@
-/* verify.css */
-
-/* Brand Colors */
-:root {
-  --primary: hsl(10, 90%, 50%);
-  --secondary: hsl(290, 70%, 55%);
-  --background: hsl(30, 30%, 95%);
-  --contrast: hsl(25, 80%, 60%);
-  --text-dark: #222;
-  --text-light: #fff;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
+/* Body Styling */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: var(--background);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5dc; /* Beige background */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-.verification-screen {
-  background: #fff;
-  padding: 2.5rem;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  width: 100%;
-  max-width: 420px;
+/* Main container */
+.container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+    border: 2px solid #ff7f50; /* Orange border */
 }
 
-.verification-screen h2 {
-  margin-bottom: 1rem;
-  color: var(--primary);
-  font-size: 1.75rem;
+/* Header */
+h2 {
+    color: #ff7f50; /* Orange color for heading */
+    margin-bottom: 20px;
+    font-size: 24px;
 }
 
-.verification-screen p {
-  color: var(--text-dark);
-  font-size: 1rem;
-  margin-bottom: 1.5rem;
+/* Form */
+.verification-form {
+    margin-top: 20px;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+.verify-btn {
+    padding: 12px 25px;
+    font-size: 18px;
+    background-color: #ff7f50; /* Orange button */
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s ease;
+}
+
+.verify-btn:hover {
+    background-color: #e76f3d; /* Darker orange for hover */
+    transform: scale(1.05); /* Slight scale effect for hover */
 }
 
 input[type="text"] {
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
-  border: 2px solid var(--contrast);
-  border-radius: 8px;
-  outline: none;
-  transition: border 0.3s;
+    padding: 12px 20px;
+    width: 100%;
+    font-size: 16px;
+    margin-top: 15px;
+    border-radius: 6px;
+    border: 2px solid #ff7f50; /* Orange border */
+    box-sizing: border-box;
+    transition: border 0.3s ease;
 }
 
 input[type="text"]:focus {
-  border-color: var(--primary);
+    border-color: #e76f3d; /* Darker orange when focused */
+    outline: none;
 }
 
-button {
-  padding: 0.75rem;
-  font-size: 1rem;
-  background-color: var(--primary);
-  color: var(--text-light);
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s;
+input[type="text"]::placeholder {
+    color: #ff7f50; /* Orange placeholder text */
 }
 
-button:hover {
-  background-color: var(--secondary);
+/* Error message */
+.error-message {
+    color: #e74c3c; /* Red for error messages */
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    .verify-btn {
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+
+    input[type="text"] {
+        font-size: 14px;
+    }
 }

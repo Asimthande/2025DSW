@@ -46,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION['first_name'] = $user['FirstName'] ?? '';
                     $_SESSION['last_name'] = $user['LastName'] ?? '';
                     $_SESSION['email'] = $user['Email'] ?? '';
+                    $_SESSION['bus_id'] = $user['BusID'];
                     $_SESSION['student_number'] = $user['StudentNumber'] ?? null;
 
                     // Redirect to the role-specific page

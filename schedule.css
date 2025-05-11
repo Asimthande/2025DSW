@@ -1,6 +1,7 @@
+/* Base styles */
 body {
   font-family: Arial, sans-serif;
-  background-color: hsl(30, 30%, 95%);
+  background-color: hsl(30, 30%, 95%); /* Light beige background */
   margin: 0;
   padding: 0;
   color: #333;
@@ -12,15 +13,56 @@ body {
   padding: 2rem;
   background: white;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
   text-align: center;
-  color: hsl(10, 90%, 50%);
+  color: hsl(10, 90%, 50%); /* Orange color for title */
   margin-bottom: 1.5rem;
 }
 
+/* Controls Section */
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.date-picker form {
+  display: inline-block;
+}
+
+.date-picker input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  width: 160px;
+}
+
+.sort-options {
+  display: flex;
+  gap: 20px;
+}
+
+.sort-options a {
+  text-decoration: none;
+  color: hsl(10, 90%, 50%); /* Orange color */
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.sort-options a:hover {
+  color: hsl(10, 70%, 45%); /* Darker orange when hovered */
+}
+
+.sort-options a.active {
+  color: hsl(290, 70%, 55%); /* Blueish color when active */
+}
+
+/* View Toggle */
 .view-toggle {
   text-align: center;
   margin-bottom: 20px;
@@ -29,7 +71,7 @@ h1 {
 .view-toggle button {
   padding: 10px 20px;
   margin: 0 10px;
-  background-color: hsl(10, 90%, 50%);
+  background-color: hsl(10, 90%, 50%); /* Orange color */
   color: white;
   border: none;
   border-radius: 5px;
@@ -37,38 +79,74 @@ h1 {
 }
 
 .view-toggle button:hover {
-  background-color: hsl(10, 90%, 40%);
+  background-color: hsl(10, 90%, 40%); /* Darker orange when hovered */
 }
 
 .view-toggle button.active {
-  background-color: hsl(290, 70%, 55%);
+  background-color: hsl(290, 70%, 55%); /* Blueish color for active state */
 }
 
-#schedule-table {
+/* Table View */
+.view-container table {
   width: 100%;
   border-collapse: collapse;
 }
 
-#schedule-table th, #schedule-table td {
+.view-container table th,
+.view-container table td {
   padding: 12px;
   border-bottom: 1px solid #ddd;
   text-align: center;
 }
 
-#schedule-table th {
-  background-color: orange;
+.view-container table th {
+  background-color: hsl(10, 90%, 50%); /* Orange background for header */
   color: white;
 }
 
-#schedule-list {
+.view-container table tr:nth-child(even) {
+  background-color: hsl(30, 30%, 98%); /* Light beige rows */
+}
+
+.view-container table tr:hover {
+  background-color: hsl(30, 30%, 90%); /* Slightly darker beige on hover */
+}
+
+/* List View */
+.view-container ul {
   list-style-type: none;
   padding: 0;
 }
 
-#schedule-list li {
-  background-color: hsl(290, 70%, 95%);
+.view-container ul li {
+  background-color: hsl(290, 70%, 95%); /* Light blueish background */
   padding: 15px;
   margin-bottom: 10px;
-  border-left: 5px solid hsl(290, 70%, 55%);
+  border-left: 5px solid hsl(290, 70%, 55%); /* Blueish border for left side */
   border-radius: 5px;
+}
+
+.view-container ul li:hover {
+  background-color: hsl(290, 70%, 85%); /* Slightly darker blueish background on hover */
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .sort-options {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .view-toggle {
+    margin-top: 20px;
+  }
+
+  .view-toggle button {
+    margin: 5px 0;
+  }
 }
