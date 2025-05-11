@@ -1,0 +1,147 @@
+-- Recreating the tblBusRoutes table
+CREATE TABLE tblBusRoutes (
+    route_id INT AUTO_INCREMENT PRIMARY KEY,
+    start_location VARCHAR(100),
+    end_location VARCHAR(100)
+);
+
+-- Recreating the tblBuses table
+CREATE TABLE tblBuses (
+    bus_id INT AUTO_INCREMENT PRIMARY KEY,
+    bus_plate VARCHAR(50),
+    seats INT,
+    route_id INT,
+    status TINYINT(1) DEFAULT 1,  -- 1 for active, 0 for inactive
+    FOREIGN KEY (route_id) REFERENCES tblBusRoutes(route_id)
+);
+
+-- Recreating the Admins table
+CREATE TABLE Admins (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    FirstName VARCHAR(100),
+    LastName VARCHAR(100),
+    Email VARCHAR(100),
+    Password VARCHAR(255),
+    role_id INT,
+    EndOfContract DATE,
+    state TINYINT(1) DEFAULT 1  -- 1 for active, 0 for inactive
+);
+
+-- Recreating the Students table
+CREATE TABLE Students (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    StudentNumber VARCHAR(20) UNIQUE,
+    FirstName VARCHAR(100),
+    LastName VARCHAR(100),
+    Email VARCHAR(100),
+    Password VARCHAR(255),
+    state TINYINT(1) DEFAULT 1  -- 1 for active, 0 for inactive
+);
+
+-- Recreating the tblBusCapacity table
+CREATE TABLE tblBusCapacity (
+    bus_id INT PRIMARY KEY,
+    available_seats INT,
+    booked_seats INT,
+    FOREIGN KEY (bus_id) REFERENCES tblBuses(bus_id)
+);
+
+-- Recreating the tblBookings table
+CREATE TABLE tblBookings (
+    booking_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_number VARCHAR(20),
+    bus_id INT,
+    booking_time DATETIME,
+    reserved_seat INT,
+    FOREIGN KEY (student_number) REFERENCES Students(StudentNumber),
+    FOREIGN KEY (bus_id) REFERENCES tblBuses(bus_id)
+);
+
+-- Recreating the tblBusSchedules table
+CREATE TABLE tblBusSchedules (
+    schedule_id INT AUTO_INCREMENT PRIMARY KEY,
+    bus_id INT,
+    departure_time DATETIME,
+    eta DATETIME,
+    route_id INT,
+    FOREIGN KEY (bus_id) REFERENCES tblBuses(bus_id),
+    FOREIGN KEY (route_id) REFERENCES tblBusRoutes(route_id)
+);
+
+-- Recreating the tblDrivers table
+CREATE TABLE tblDrivers (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    FirstName VARCHAR(100),
+    LastName VARCHAR(100),
+    BusID INT,
+    Email VARCHAR(100),
+    Password VARCHAR(255),
+    state TINYINT(1) DEFAULT 1,  -- 1 for active, 0 for inactive
+    FOREIGN KEY (BusID) REFERENCES tblBuses(bus_id)
+);
+
+-- Recreating the tblNotifications table
+CREATE TABLE tblNotifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_number VARCHAR(20),
+    message TEXT,
+    timestamp DATETIME NOT NULL,
+    status TINYINT(1) DEFAULT 0,  -- 0 for unread, 1 for read
+    FOREIGN KEY (student_number) REFERENCES Students(StudentNumber)
+);
+
+-- Recreating the tblQueuePositions table
+CREATE TABLE tblQueuePositions (
+    queue_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_number VARCHAR(20),
+    booking_id INT,
+    queue_position INT,
+    queue_status TINYINT(1) DEFAULT 0,  -- 0 for waiting, 1 for served, 2 for cancelled
+    FOREIGN KEY (student_number) REFERENCES Students(StudentNumber),
+    FOREIGN KEY (booking_id) REFERENCES tblBookings(booking_id)
+);
+
+-- Recreating the Emergency table
+CREATE TABLE Emergency (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    Type VARCHAR(50),
+    StudentNumber VARCHAR(20),
+    BusID INT,
+    Latitude DECIMAL(10, 6),
+    Longitude DECIMAL(10, 6),
+    Situation TEXT,
+    FOREIGN KEY (StudentNumber) REFERENCES Students(StudentNumber),
+    FOREIGN KEY (BusID) REFERENCES tblBuses(bus_id)
+);
+
+-- Recreating the live table
+CREATE TABLE live (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    Latitude DECIMAL(10, 6),
+    Longitude DECIMAL(10, 6),
+    UpdateTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    BusID INT,
+    FOREIGN KEY (BusID) REFERENCES tblBuses(bus_id)
+);
+
+-- Recreating the location_history table
+CREATE TABLE location_history (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    BusID INT,
+    Latitude DECIMAL(10, 6),
+    Longitude DECIMAL(10, 6),
+    UpdateTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (BusID) REFERENCES tblBuses(bus_id)
+);
+
+-- Recreating the Maintain table
+CREATE TABLE Maintain (
+    MaintainID INT AUTO_INCREMENT PRIMARY KEY,
+    BusID INT,
+    Date DATE,
+    EstimatedReturn DATE,
+    MaintainanceType TEXT,
+    AdminID INT,
+    FOREIGN KEY (BusID) REFERENCES tblBuses(bus_id),
+    FOREIGN KEY (AdminID) REFERENCES Admins(ID)
+);

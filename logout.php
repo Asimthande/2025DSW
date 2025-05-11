@@ -19,7 +19,7 @@ session_destroy();
     <p>We're sorry to see you go. Would you like to return to the homepage or log in again?</p>
 
     <div class="buttons">
-        <a href="splash.php"><button class="btn">Go to Homepage</button></a>
+        <a href="index.php"><button class="btn">Go to Homepage</button></a>
         <a href="signin.php"><button class="btn">Log In Again</button></a>
     </div>
 

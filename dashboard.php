@@ -46,9 +46,40 @@ $role = $_SESSION['role'];
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="language.js"></script>
+    <style>
+#right-panel{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+         .loader {
+    border: 8px solid lightgray;
+    border-top: 8px solid blue;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+  
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+    #current-time{
+        position:absolute;
+        left:30%;
+    }
+    </style>
 </head>
-<body>
+<body >
 
+            <p id="current-time" style="font-size: 3pc; font-weight: bold; color: #333;"></p>
     <nav class="sidebar" id="sidebar">
         <h2>Dashboard</h2>
               <ul>
@@ -84,24 +115,90 @@ $role = $_SESSION['role'];
             <div id="map-display">
                 <div id="map"></div>
             </div>
-            <p>Next Bus: Route 5 - 10:30 AM (ETA: 8 mins)</p>
         </section>
 
         <section id="tracking">
             <h2>Live Bus Tracking</h2>
             <div id="tracking-map"></div>
         </section>
+<h1>Schedule</h1><?php
+include 'partial/connect.php'; // database credentials
 
-        <section id="schedule">
-            <h2>Bus Schedule</h2>
-            <div id="schedule-info">Loading Schedule...</div>
-        </section>
+$today = date("Y-m-d");
+$sql = "SELECT 
+            tblBusSchedules.schedule_id,
+            tblBusSchedules.bus_id,
+            tblBusSchedules.departure_time,
+            tblBusSchedules.eta,
+            tblBusRoutes.route_id,
+            tblBusRoutes.start_location,
+            tblBusRoutes.end_location
+        FROM tblBusSchedules 
+        JOIN tblBusRoutes 
+        ON tblBusRoutes.route_id = tblBusSchedules.route_id
+        WHERE DATE(departure_time) = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $today);
+$stmt->execute();
+$result = $stmt->get_result();
+
+echo '<div class="schedule-table-container">';
+if ($result->num_rows > 0) {
+    echo '
+    <table class="schedule-table">
+        <thead>
+            <tr>
+                <th>Schedule ID</th>
+                <th>Bus ID</th>
+                <th>Route ID</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Departure Time</th>
+                <th>ETA</th>
+            </tr>
+        </thead>
+        <tbody>';
+    while ($row = $result->fetch_assoc()) {
+        echo '
+            <tr>
+                <td>' . htmlspecialchars($row['schedule_id']) . '</td>
+                <td>' . htmlspecialchars($row['bus_id']) . '</td>
+                <td>' . htmlspecialchars($row['route_id']) . '</td>
+                <td>' . htmlspecialchars($row['start_location']) . '</td>
+                <td>' . htmlspecialchars($row['end_location']) . '</td>
+                <td>' . date("H:i", strtotime($row['departure_time'])) . '</td>
+                <td>' . date("H:i", strtotime($row['eta'])) . '</td>
+            </tr>';
+    }
+    echo '
+        </tbody>
+    </table>';
+} else {
+    echo '<p class="no-schedule">No schedules found for today.</p>';
+}
+echo '</div>';
+
+$stmt->close();
+$conn->close();
+?>
     </div>
 
 <aside class="right-panel" id="right-panel" style="height: 100vh; overflow-y: auto;">
         <h3>Notifications</h3>
+        <div style="display: flex;flex-direction: column; text-align: center;">
         <ul id="alerts">
-        <script>
+        <div class="loader" id="loader"></div>
+        </ul>
+        </div>
+
+
+        <h3>Weather</h3>
+        <div id="weather-container">
+            <p id="weather">Loading weather...</p>
+        </div>
+        <br><br><br>
+    </aside>
+<script>
 setInterval(function() {
     fetch('dashboard-content.php')
         .then(response => response.text())
@@ -109,15 +206,23 @@ setInterval(function() {
             document.getElementById('alerts').innerHTML = data;
         });
 }, 20000);
-</script>
-            <li>Loading Notifications...</li>
-        </ul>
-        <h3>Weather</h3>
-        <div id="weather-container">
-            <p id="weather">Loading weather...</p>
-        </div>
-    </aside>
+    setTimeout(() => {
+      const loader = document.getElementById("loader");
+      loader.style.display = "none";
+    }, 20000);
+    setTimeout()
+function showCurrentTime() {
+  const timeElement = document.getElementById('current-time');
+  const currentTime = new Date();
+  const hours = String(currentTime.getHours()).padStart(2, '0');
+  const minutes = String(currentTime.getMinutes()).padStart(2, '0');
+  const seconds = String(currentTime.getSeconds()).padStart(2, '0');
+  
+  timeElement.innerHTML = ` ${hours}:${minutes}:${seconds}`;
+}
 
+setInterval(showCurrentTime, 1000);
+</script>
     <script src="dashboard.js"></script>
 </body>
 </html>

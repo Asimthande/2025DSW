@@ -66,6 +66,7 @@ if ($chartType === 'booking_hours') {
     <meta charset="UTF-8">
     <title>UJ Stabus Booking Analytics</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="language.js"></script>
     <style>
         body {
             font-family: "Segoe UI", sans-serif;

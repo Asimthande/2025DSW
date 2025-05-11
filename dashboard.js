@@ -80,7 +80,7 @@ async function getWeather() {
         document.getElementById('weather').innerHTML = 'Failed to load weather data';
     }
 }
-setInterval(getWeather, 30000);
+setInterval(getWeather, 1000);
 getWeather();
 
 // ===================== TRACKING MAP FOR ALL BUSES ===========================

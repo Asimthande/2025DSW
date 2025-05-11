@@ -1,101 +1,155 @@
+<?php
+session_start();
+
+// Include the database connection file
+include('partial/connect.php');
+
+// Ensure the user is logged in and has a valid bus ID
+if (!isset($_SESSION['bus_id'])) {
+    die("❌ You are not logged in.");
+}
+
+// Get the bus ID from the session
+$busID = $_SESSION['bus_id'];
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Driver Live Tracking</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Dashboard</title>
     <link rel="stylesheet" href="driver.css">
+<script src="language.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+    <div class="container">
+        <a href="logout.php" class="logout-btn">Logout</a>
+        <h2>Driver Live Location</h2>
 
-<div class="container">
-    <a href="logout.php" class="logout-btn">Logout</a>
-    <h2>Driver Live Location</h2>
+        <p><strong>Bus ID:</strong> <?= $busID ?></p>
 
-    <select id="bus-id">
-        <option value="" disabled selected>Select Bus ID</option>
-        <?php for ($i = 1; $i <= 10; $i++): ?>
-            <option value="<?= $i ?>">Bus <?= $i ?></option>
-        <?php endfor; ?>
-    </select>
+        <!-- Starting Point Selection -->
+        <label for="start">Starting Point:</label>
+        <select id="start" name="start" required>
+            <option value="">-- Select Start --</option>
+            <option value="APB">APB</option>
+            <option value="APK">APK</option>
+            <option value="DFC">DFC</option>
+            <option value="SWC">SWC</option>
+        </select>
 
-    <!-- Added Departure Time input field -->
-    <label for="departure-time">Departure Time:</label>
-    <input type="time" id="departure-time" name="departure-time" required>
+        <!-- Ending Point Selection -->
+        <label for="end">Ending Point:</label>
+        <select id="end" name="end" required>
+            <option value="">-- Select End --</option>
+            <option value="APB">APB</option>
+            <option value="APK">APK</option>
+            <option value="DFC">DFC</option>
+            <option value="SWC">SWC</option>
+        </select>
 
-    <div class="btn-container">
-        <button class="start-btn" onclick="startSharing()">📡 Start Sharing</button>
-        <button class="stop-btn" onclick="stopSharing()" disabled>🛑 Stop Sharing</button>
-    </div>
+        <!-- Departure Time -->
+        <label for="departure-time">Departure Time:</label>
+        <input type="time" id="departure-time" name="departure-time" required min="06:00" max="22:00">
+        <small>(Time must be between 06:00 and 22:00)</small>
 
-    <p class="status">Status: <span id="status-text">❌ Not Sharing</span></p>
-</div>
+        <!-- Buttons to Start and Stop Location Sharing -->
+        <div class="btn-container">
+            <button class="start-btn" onclick="startSharing()">📡 Start Sharing</button>
+            <button class="stop-btn" onclick="stopSharing()" disabled>🛑 Stop Sharing</button>
+        </div>
 
-<script>
-    let intervalId = null;
-    let busID = null;
-    let departureTime = null;
+        <button type="button" onclick="updateSchedule()">Set Schedule</button>
 
-    function updateLocation() {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
+        <script>
+            let intervalId = null;
 
-            busID = document.getElementById("bus-id").value;
-            departureTime = document.getElementById("departure-time").value; // Get the departure time
-
-            if (!busID || !departureTime) {
-                alert("Please select a Bus ID and a Departure Time.");
-                stopSharing();
-                return;
+            // Function to start sharing location
+            function startSharing() {
+                if (!intervalId) {
+                    updateLocation();
+                    intervalId = setInterval(updateLocation, 5000);
+                    document.querySelector(".start-btn").disabled = true;
+                    document.querySelector(".stop-btn").disabled = false;
+                    document.getElementById("status-text").innerText = "✅ Sharing";
+                }
             }
 
-            $.post("driver.php", {
-                latitude: latitude,
-                longitude: longitude,
-                BusID: busID,
-                departureTime: departureTime  // Pass departure time
-            }, function(response) {
-                console.log(response);
-            });
-        }, function(error) {
-            console.error("Error getting location:", error.message);
-        }, {
-            enableHighAccuracy: true,
-            timeout: 10000,
-            maximumAge: 0
-        });
-    }
+            // Function to stop sharing location
+            function stopSharing() {
+                if (intervalId) {
+                    clearInterval(intervalId);
+                    intervalId = null;
+                    document.querySelector(".start-btn").disabled = false;
+                    document.querySelector(".stop-btn").disabled = true;
+                    document.getElementById("status-text").innerText = "❌ Not Sharing";
+                }
+            }
 
-    function startSharing() {
-        busID = document.getElementById("bus-id").value;
-        departureTime = document.getElementById("departure-time").value; // Get the departure time
+            // Function to update location every 5 seconds
+            function updateLocation() {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    const busID = <?= $busID ?>;
+                    const departureTime = document.getElementById("departure-time").value;
+                    const start = document.getElementById("start").value;
+                    const end = document.getElementById("end").value;
 
-        if (!busID || !departureTime) {
-            alert("Please select a Bus ID and a Departure Time.");
-            return;
-        }
+                    // Ensure all fields are filled before sending the request
+                    if (!busID || !departureTime || !start || !end) {
+                        alert("Please fill all required fields.");
+                        stopSharing();
+                        return;
+                    }
 
-        if (!intervalId) {
-            updateLocation();
-            intervalId = setInterval(updateLocation, 5000);
-            document.querySelector(".start-btn").disabled = true;
-            document.querySelector(".stop-btn").disabled = false;
-            document.getElementById("status-text").innerText = "✅ Sharing";
-        }
-    }
+                    // Send location to update-location.php
+                    $.post("update-location.php", {
+                        latitude: latitude,
+                        longitude: longitude,
+                        BusID: busID
+                    }, function(response) {
+                        console.log(response);
+                    });
+                }, function(error) {
+                    console.error("Error getting location:", error.message);
+                }, {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                });
+            }
 
-    function stopSharing() {
-        if (intervalId) {
-            clearInterval(intervalId);
-            intervalId = null;
-            document.querySelector(".start-btn").disabled = false;
-            document.querySelector(".stop-btn").disabled = true;
-            document.getElementById("status-text").innerText = "❌ Not Sharing";
-        }
-    }
-</script>
+            // Function to update the bus schedule
+            function updateSchedule() {
+                const departureTime = document.getElementById("departure-time").value;
+                const start = document.getElementById("start").value;
+                const end = document.getElementById("end").value;
 
+                // Check if the start and end locations are the same
+                if (start === end) {
+                    alert("❌ Start location and End location cannot be the same.");
+                    return;
+                }
+
+                // Check if all fields are filled
+                if (!departureTime || !start || !end) {
+                    alert("❌ Please fill all required fields.");
+                    return;
+                }
+
+                // Send the schedule data to update-schedule.php
+                $.post("update-schedule.php", {
+                    departure-time: departureTime,
+                    start: start,
+                    end: end
+                }, function(response) {
+                    alert(response); // Display the response from the server
+                });
+            }
+        </script>
+
+    </div>
 </body>
 </html>

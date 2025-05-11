@@ -9,6 +9,42 @@ body {
   background-color: #fdf6e3;; 
   color: #2c3e50;
 }
+.schedule-table-container {
+    background-color: beige;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    overflow-x: auto;
+}
+
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fffaf0;
+}
+
+.schedule-table th,
+.schedule-table td {
+    border: 1px solid #f0d9b5;
+    padding: 10px 15px;
+    text-align: center;
+    color: #333;
+}
+
+.schedule-table th {
+    background-color: orange;
+    color: white;
+}
+
+.schedule-table tr:nth-child(even) {
+    background-color: #fdf1dc;
+}
+
+.no-schedule {
+    text-align: center;
+    font-style: italic;
+    color: #666;
+}
 
 h1, h2, h3, button {
   font-family: 'Roboto', sans-serif;

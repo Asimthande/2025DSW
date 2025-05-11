@@ -1,83 +1,77 @@
+/* General styles */
 body {
     font-family: Arial, sans-serif;
-    background: #f4f4f4;
-    padding: 20px;
-    text-align: center;
+    background-color: #f5f5dc; /* Beige background */
+    color: #333;
     margin: 0;
+    padding: 0;
 }
 
 .container {
-    max-width: 500px;
-    margin: auto;
-    padding: 30px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h2 {
-    margin-bottom: 20px;
-}
-
-select#bus-id {
-    padding: 10px;
-    font-size: 16px;
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-.btn-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-button {
-    padding: 20px;
-    font-size: 18px;
-    font-weight: bold;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    width: 100%;
-}
-
-.start-btn {
-    background-color: #28a745;
-    color: white;
-}
-
-.stop-btn {
-    background-color: #dc3545;
-    color: white;
-}
-
-.status {
-    margin-top: 20px;
-    font-weight: bold;
+    text-align: center;
+    color: #e67e22; /* Orange */
 }
 
 .logout-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background-color: #007bff;
+    float: right;
+    background-color: #e67e22; /* Orange */
     color: white;
     padding: 8px 16px;
-    font-size: 14px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
     text-decoration: none;
+    border-radius: 5px;
 }
 
-@media (min-width: 600px) {
-    .btn-container {
-        flex-direction: row;
-    }
+.logout-btn:hover {
+    background-color: #d35400; /* Darker orange */
+}
 
-    button {
-        width: 48%;
-    }
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input[type="time"], select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #e67e22; /* Orange */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #d35400;
+}
+
+.btn-container {
+    text-align: center;
+}
+
+.status {
+    text-align: center;
+    font-size: 18px;
+}
+
+small {
+    display: block;
+    margin-top: 10px;
+    color: #e67e22;
 }

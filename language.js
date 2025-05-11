@@ -1,0 +1,104 @@
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en', // Default language of the page
+includedLanguages: 'af,am,ar,az,be,bg,bn,bs,ca,ceb,co,cs,cy,da,de,el,en,eo,es,et,eu,fa,fi,fr,fy,ga,gd,gl,gu,ha,haw,he,hi,hmn,hr,ht,hu,hy,id,ig,is,it,ja,jw,ka,kk,km,kn,ko,ku,ky,la,lb,lo,lt,lv,mg,mi,mk,ml,mn,mr,ms,mt,my,ne,nl,no,ny,pa,pl,ps,pt,ro,ru,rw,sd,si,sk,sl,sm,sn,so,sq,sr,st,su,sv,sw,ta,te,tg,th,tk,tl,tr,tt,ug,uk,ur,uz,vi,wo,xh,yi,yo,zh-CN,zh-TW,zu,nr,ns,st,tn,ss,ve,ts',
+    layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+  }, 'google_translate_element');
+}
+
+// Run when the DOM is fully loaded
+document.addEventListener("DOMContentLoaded", function() {
+  // Create the Google Translate widget container dynamically
+  var translateContainer = document.createElement('div');
+  translateContainer.id = 'google_translate_element';
+  document.body.appendChild(translateContainer);
+
+  // Apply custom CSS to style the widget
+  const style = document.createElement('style');
+  style.innerHTML = `
+    /* Style the Google Translate container */
+    #google_translate_element {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      background-color: beige; /* Beige background */
+      border-radius: 10px;
+      padding: 10px;
+      z-index: 9999;
+      display: block; /* Initially visible */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Style the dropdown */
+    .goog-te-combo {
+      width: 200px !important;
+      padding: 8px;
+      font-size: 14px;
+      color: #333;
+      background-color: orange !important; /* Orange background */
+      border: none;
+      border-radius: 5px;
+    }
+
+    /* Style options inside the dropdown */
+    .goog-te-combo option {
+      background-color: beige !important; /* Beige background for options */
+    }
+
+    /* Change text color when selecting a language */
+    .goog-te-menu-value {
+      color: white !important;
+    }
+
+    /* Style the text inside the menu value */
+    .goog-te-menu-value span {
+      color: white !important;
+    }
+
+    /* Hide the translate banner */
+    .goog-te-banner-frame.skiptranslate {
+      display: none !important;
+    }
+
+    /* Make sure the page content is adjusted correctly */
+    body {
+      padding-bottom: 50px; /* Add padding to avoid overlap */
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Load the Google Translate script
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+  document.body.appendChild(script);
+
+  // Get the Translate container and dropdown
+  var translateElement = document.getElementById('google_translate_element');
+  var dropdown = document.querySelector('.goog-te-combo');
+
+  // Toggle visibility after language selection
+  translateElement.addEventListener('click', function() {
+    if (translateElement.style.display === 'none') {
+      translateElement.style.display = 'block'; // Show widget
+    } else {
+      translateElement.style.display = 'none'; // Hide widget
+    }
+  });
+
+  // Hide the widget after language selection
+  document.addEventListener('click', function(event) {
+    // Close the widget if the user selects a language
+    if (event.target && event.target.classList.contains('goog-te-combo')) {
+      translateElement.style.display = 'none';
+    }
+  });
+
+  // Hide the translate banner on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    const banner = document.querySelector('.goog-te-banner-frame');
+    if (banner) {
+      banner.style.display = 'none';
+    }
+  });
+});
