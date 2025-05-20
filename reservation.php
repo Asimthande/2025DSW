@@ -131,9 +131,13 @@ echo json_encode(['status' => 'success']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Reservation</title>
     <link rel="stylesheet" href="reservation.css">
+    <link rel="stylesheet" href="back.css">
 </head>
 <body>
     <div class="splash">
+    <div class="back-button">
+    <a href="dashboard.php">&larr; Back to Dashboard</a>
+</div>
         <h1>Welcome to UJ STABUS Reservation</h1>
     </div>
     <div class="container">

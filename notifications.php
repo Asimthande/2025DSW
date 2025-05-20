@@ -59,12 +59,15 @@ $stmt->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notification Center</title>
-    <link rel="stylesheet" href="notifications.css">
+    <link rel="stylesheet" href="notifications.css">    
+    <link rel="stylesheet" href="back.css">
 </head>
 <body>
     <div class="notification-center">
         <h2>Notification Center</h2>
-
+<div class="back-button">
+    <a href="dashboard.php">&larr; Back to Dashboard</a>
+</div>
         <!-- Sort Notifications -->
         <div class="filters">
             <div class="dropdown">

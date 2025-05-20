@@ -1,95 +1,98 @@
-/* Reset default spacing and sizing */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #fdf6ec;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background: #ffb347;
+            padding: 20px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .navbar button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 5px;
+            background: #fffaf3;
+            font-size: 14px;
+            cursor: pointer;
+            border: 1px solid #dba15a;
+        }
+
+        .section {
+            display: none;
+            margin-top: 30px;
+            background: #fff7ea;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #f0d9b5;
+            text-align: left;
+        }
+
+        th {
+            background: #f6d8ae;
+        }
+
+        h2 {
+            color: #d67200;
+            margin-bottom: 10px;
+        }
+
+        canvas {
+            margin-top: 30px;
+        }
+
+        .filter-form {
+            margin-top: 15px;
+        }
+
+        .filter-form input {
+            margin-right: 10px;
+        }
+        .back-button {
+    text-align: left;
+    margin-bottom: 20px;
 }
 
-/* Full-screen background */
-body {
-    height: 100vh;
-    width: 100vw;
-    background-color: hsl(30, 30%, 95%);
-    font-family: Arial, sans-serif;
-}
-
-.profile-box {
-    width: 100vw;
-    height: 100vh;
-    padding: 40px 25px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    background-color: white;
-    overflow-y: auto;
-}
-
-/* Heading (student number) */
-h1 {
-    color: black;
-    text-align: center;
-    margin-bottom: 40px;
-    font-size: 2.2rem;
-    font-weight: bold;
-}
-
-/* Labels with larger text */
-label {
-    margin-top: 20px;
-    color: #333;
-    font-weight: bold;
-    font-size: 1.2rem;
-}
-
-/* Input fields — large, padded, full width */
-input {
-    width: 100%;
-    padding: 18px;
-    margin-top: 10px;
-    border-radius: 12px;
-    border: 1.5px solid #ccc;
-    font-size: 1.2rem;
-    background-color: hsl(30, 30%, 98%);
-}
-
-/* Buttons — full width, bigger font */
-button {
-    margin-top: 30px;
-    padding: 18px;
-    border: none;
-    border-radius: 12px;
-    background-color: orange;
+.back-button a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #ffa726;
     color: white;
-    font-size: 1.3rem;
+    text-decoration: none;
+    border-radius: 5px;
     font-weight: bold;
-    cursor: pointer;
-    width: 100%;
-    transition: background 0.2s ease;
+    transition: background-color 0.3s;
 }
 
-button:hover {
-    background-color: hsl(10, 90%, 40%);
-}
-
-/* Message styling */
-.message {
-    text-align: center;
-    color: red;
-    margin-top: 20px;
-    font-size: 1.1rem;
-}
-
-/* Responsive support */
-@media (max-width: 480px) {
-    h1 {
-        font-size: 2rem;
-    }
-
-    label, input, button {
-        font-size: 1.15rem;
-    }
-
-    input, button {
-        padding: 16px;
-    }
+.back-button a:hover {
+    background-color: #fb8c00;
 }
