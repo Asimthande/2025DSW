@@ -51,6 +51,8 @@ $notifications_total = mysqli_fetch_assoc($notifications)['total'];
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+
+<script src="language.js"></script>
     <div class="admin-container">
         <header>
             <h1>Admin Dashboard</h1>
@@ -58,9 +60,12 @@ $notifications_total = mysqli_fetch_assoc($notifications)['total'];
                 <ul>
                     <li><a href="#overview">Overview</a></li>
                     <li><a href="manage_users.php">Manage Users</a></li>
+                    <li><a href="admin-management.php">Manage Admins</a></li>
                     <li><a href="manage_drivers.php">Manage Drivers</a></li>
-                    <li><a href="bus_maintenance.php">Bus Maintenance</a></li>
                     <li><a href="view_databases.php">View Databases</a></li>
+                    <li><a href="#add-maintenance">Add Maintainance</a></li>                    
+                    <li><a href="#update-maintenance">Update Maintainance</a></li>
+
                 </ul>
             </nav>
         </header>
@@ -103,21 +108,48 @@ $notifications_total = mysqli_fetch_assoc($notifications)['total'];
                 <button onclick="window.location.href='manage_users.php'">Edit Users</button>
             </section>
 
-            <section id="bus-maintenance">
-                <h2>Bus Maintenance</h2>
-                <form action="update_bus_status.php" method="post">
-                    <label for="bus-id">Bus ID</label>
-                    <input type="text" id="bus-id" name="bus-id" required>
+<section id="add-maintenance">
+    <h2>Add New Maintenance Record</h2>
+    <form action="add_maintenance.php" method="post">
+        <label for="bus-id">Bus ID</label>
+        <input type="text" id="bus-id" name="BusID" required>
 
-                    <label for="status">Maintenance Status</label>
-                    <select id="status" name="status" required>
-                        <option value="under-maintenance">Under Maintenance</option>
-                        <option value="active">Active</option>
-                    </select>
+        <label for="date">Date</label>
+        <input type="date" id="date" name="Date" required>
 
-                    <button type="submit">Update Status</button>
-                </form>
-            </section>
+        <label for="estimated-return">Estimated Return</label>
+        <input type="date" id="estimated-return" name="EstimatedReturn" required>
+
+        <label for="type">Maintenance Type</label>
+        <input type="text" id="type" name="MaintainanceType" required>
+
+        <button type="submit">Add Maintenance</button>
+    </form>
+</section>
+
+<section id="update-maintenance">
+    <h2>Update Maintenance Record</h2>
+    <form action="update_maintenance.php" method="post">
+        <label for="maintain-id">Maintain ID</label>
+        <input type="number" id="maintain-id" name="MaintainID" required>
+
+        <label for="bus-id">Bus ID</label>
+        <input type="text" id="bus-id" name="BusID" required>
+
+        <label for="date">Date</label>
+        <input type="date" id="date" name="Date" required>
+
+        <label for="estimated-return">Estimated Return</label>
+        <input type="date" id="estimated-return" name="EstimatedReturn" required>
+
+        <label for="type">Maintenance Type</label>
+        <input type="text" id="type" name="MaintainanceType" required>
+
+        <button type="submit">Update Maintenance</button>
+    </form>
+</section>
+
+
 
             <section id="view-db">
                 <h2>View Databases</h2>

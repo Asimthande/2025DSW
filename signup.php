@@ -56,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="signin.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
 <body>
   <div class="signup-container">
@@ -111,8 +112,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <button type="submit" class="signup-btn">Sign Up</button>
         <div class="divider"><span>or</span></div>
         <div class="social-buttons">
-          <button type="button" class="google-btn"><i class="fab fa-google"></i> Sign up with Google</button>
-          <button type="button" class="facebook-btn"><i class="fab fa-facebook-f"></i> Sign up with Facebook</button>
+          <button type="button" class="google-btn" id="googleAuth" onclick="studentNumber()"><i class="fab fa-google"></i> Sign up with Google</button>
+          <button type="button" class="facebook-btn" id="facebookAuth" ><i class="fab fa-facebook-f"></i> Sign up with Facebook</button>
         </div>
         <p class="login-link">Already have an account? <a href="signin.php">Log in</a></p>
       </form>
@@ -125,5 +126,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       pw.type = pw.type === 'password' ? 'text' : 'password';
     }
   </script>
+  <script src="google.js"></script>
 </body>
 </html>

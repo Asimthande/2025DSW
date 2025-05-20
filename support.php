@@ -1,3 +1,57 @@
+<?php
+// Include the database connection
+include 'partial/connect.php';
+
+// Check if the connection is established
+if (!$conn) {
+    die('Error: Failed to connect to the database. Please check the connection settings.');
+}
+
+// Form submission logic
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Sanitize user input to prevent SQL injection and XSS
+    $name = htmlspecialchars(trim($_POST['name']));
+    $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+    $question = htmlspecialchars(trim($_POST['message']));
+
+    // Validate email format after sanitization
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo 'Invalid email format.';
+        exit;
+    }
+
+    // Check if the fields are not empty
+    if (empty($name) || empty($email) || empty($question)) {
+        echo 'Please fill all fields.';
+        exit;
+    }
+
+    // Prepare the SQL query using MySQLi
+    $sql = "INSERT INTO questions (Name, Email, Question) VALUES (?, ?, ?)";
+
+    // Use prepared statements with MySQLi to prevent SQL injection
+    if ($stmt = $conn->prepare($sql)) {  // Use $conn here instead of $mysqli
+        // Bind the parameters
+        $stmt->bind_param("sss", $name, $email, $question);
+
+        // Execute the query
+        if ($stmt->execute()) {
+            echo "<h1 style=\"color:green;\">Your question has been submitted successfully!</h1>";
+        } else {
+            echo "<h1 style=\"color:red;\">Could Not Submit Question!</h1>";
+        }
+
+        // Close the statement
+        $stmt->close();
+    } else {
+        echo 'Error preparing the query: ' . $conn->error;  
+    }
+}
+
+// Close the MySQLi connection after use
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,7 +91,8 @@
     <!-- Support Section -->
     <section id="support">
         <h2>Contact Support</h2>
-        <form id="support-form">
+        <!-- Form submission to the current page -->
+        <form id="support-form" method="POST">
             <label for="name">Your Name:</label>
             <input type="text" id="name" name="name" required>
 
@@ -51,8 +106,6 @@
         </form>
     </section>
 </div>
-
-<script src="support.js"></script>
 
 </body>
 </html>

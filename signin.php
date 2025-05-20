@@ -3,6 +3,8 @@ session_start();
 
 // Include the database connection file
 include('partial/connect.php');  // This includes the connection from partial/connect.php
+require_once __DIR__.'/vendor/autoload.php';
+require_once __DIR__.'/config.php';
 
 $errorMessage = "";
 
@@ -126,7 +128,7 @@ if (isset($_GET['guest_login']) && $_GET['guest_login'] === 'true') {
         <button type="submit" class="signup-btn">Sign In</button>
         <div class="divider"><span>or</span></div>
         <div class="social-buttons">
-          <button type="button" class="google-btn"><i class="fab fa-google"></i> Sign in with Google</button>
+          <button type="button" class="google-btn" id="googleAuth"><i class="fab fa-google"></i> Sign in with Google</button>
           <button type="button" class="facebook-btn"><i class="fab fa-facebook-f"></i> Sign in with Facebook</button>
         </div>
         <p class="login-link">Don't have an account? <a href="signup.php">Sign Up</a></p>
@@ -140,5 +142,6 @@ if (isset($_GET['guest_login']) && $_GET['guest_login'] === 'true') {
       pw.type = pw.type === 'password' ? 'text' : 'password';
     }
   </script>
+  <script src="google.js"></script>
 </body>
 </html>

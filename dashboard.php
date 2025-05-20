@@ -88,10 +88,8 @@ $role = $_SESSION['role'];
             <li><button onclick="window.location.href='bus-tracking.php'" <?= $role == 'guest' ? 'style="opacity: 0.5; pointer-events: none;display:none;"' : '' ?>><i class="fas fa-bus"></i> Live Tracking</button></li>
             <li><button onclick="window.location.href='schedule.php'"><i class="fas fa-calendar-alt"></i> Schedule</button></li>
             <li><button onclick="window.location.href='chart.php'" <?= $role == 'guest' ? 'style="opacity: 0.5;display:none; pointer-events: none;"' : '' ?>><i class="fas fa-chart-bar"></i> Stats & Analysis</button></li>
-            <li><button onclick="window.location.href='reserve-seat.php'" <?= $role == 'guest' ? 'style="opacity: 0.5;display:none; pointer-events: none;"' : '' ?>><i class="fas fa-chair"></i> Reserve Seat</button></li>
             <li><button onclick="window.location.href='reservation.php'" <?= $role == 'guest' ? 'style="opacity: 0.5;display:none; pointer-events: none;"' : '' ?>><i class="fas fa-clipboard-check"></i> My Reservations</button></li>
             <li><button onclick="window.location.href='notifications.php'" <?= $role == 'guest' ? 'style="opacity: 0.5;display:none; pointer-events: none;"' : '' ?>><i class="fas fa-bell"></i> Notifications</button></li>
-            <li><button onclick="window.location.href='verify.php'" <?= $role == 'guest' ? 'style="opacity: 0.5; pointer-events: none;display:none;"' : '' ?>><i class="fas fa-shield-alt"></i> Verify</button></li>
             <li><button onclick="window.location.href='settings.php'" <?= $role == 'guest' ? 'style="opacity: 0.5; pointer-events: none;display:none;"' : '' ?>><i class="fas fa-cogs"></i> Settings</button></li>
             <li><button onclick="window.location.href='weather.php'"><i class="fas fa-cloud-sun"></i> Weather</button></li>
             <li><button onclick="window.location.href='emergency-alert.php'"><i class="fas fa-exclamation-circle"></i> Emergency Alert</button></li>

@@ -94,6 +94,7 @@ img{
   flex-direction: column;
   justify-content: center;
   background: #fff;
+  overflow-y: auto
 }
 
 .signup-form {

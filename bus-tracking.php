@@ -61,6 +61,9 @@
 <body>
 
 <div class="control-panel">
+<div class="back-button">
+    <a href="dashboard.php">&larr; Back to Dashboard</a>
+</div>
     <label for="bus-select">Select Bus To Track:</label>
     <select id="bus-select">
         <?php for ($i = 1; $i <= 10; $i++): ?>
@@ -124,7 +127,7 @@
     }
 
     fetchLocation(true)
-    setInterval(() => fetchLocation(false), 5000)
+    setInterval(() => fetchLocation(false), 2000)
 
     document.getElementById("bus-select").addEventListener("change", function () {
         selectedBusID = this.value

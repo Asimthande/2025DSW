@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 /**
  * REQUIRED SETTINGS
  *
@@ -9,7 +9,7 @@
 // The name and address which should be used for the sender details.
 // The name can be anything you want, the address should be something in your own domain. It does not need to exist as a mailbox.
 define('CONTACTFORM_FROM_ADDRESS', 'strikersavings@gmail.com');
-define('CONTACTFORM_FROM_NAME', 'Striker Savings On The Go!');
+define('CONTACTFORM_FROM_NAME', 'UJ Stabus');
 
 // The name and address to which the contact message should be sent.
 // These details should NOT be the same as the sender details.
