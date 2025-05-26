@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms and Conditions</title>
     <link rel="stylesheet" href="termsandconditions.css">
+        <link rel="icon" type="image/jpeg" href="images/Stabus.jpeg">
 </head>
 <body>
 
@@ -37,7 +38,7 @@
         <p>These terms are governed by the laws of the jurisdiction in which we operate.</p>
 
         <h2>7. Contact Information</h2>
-        <p>If you have any questions or concerns regarding these terms, please contact us at: <strong>support@example.com</strong>.</p>
+        <p>If you have any questions or concerns regarding these terms, please contact us at: <strong>ujstabus@gmail.com</strong>.</p>
     </div>
 
     <div class="agreement">

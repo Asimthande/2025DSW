@@ -22,6 +22,7 @@ if (isset($_GET['city']) && !empty($_GET['city'])) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Weather Display</title>
+        <link rel="icon" type="image/jpeg" href="images/Stabus.jpeg">
   <style>
     body {
       font-family: Arial, sans-serif;
