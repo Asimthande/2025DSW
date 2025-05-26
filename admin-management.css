@@ -1,4 +1,3 @@
-/* General Styles */
 :root {
   --primary: hsl(10, 90%, 50%);
   --secondary: hsl(290, 70%, 55%);
@@ -20,7 +19,6 @@ body {
   padding: 20px;
 }
 
-/* Header and Navigation */
 header {
   background-color: var(--primary);
   color: #fff;
@@ -54,7 +52,6 @@ nav ul li a:hover {
   background: rgba(255, 255, 255, 0.4);
 }
 
-/* Main Content */
 section {
   margin-top: 40px;
   background: #fff;
@@ -94,7 +91,6 @@ canvas {
   box-shadow: 0 0 5px rgba(0,0,0,0.05);
 }
 
-/* Form Styling */
 form {
   display: flex;
   flex-direction: column;
@@ -123,7 +119,6 @@ form button:hover {
   background-color: hsl(10, 90%, 40%);
 }
 
-/* Button Styling */
 button {
   padding: 10px 15px;
   border: none;
@@ -137,7 +132,6 @@ button:hover {
   background: hsl(290, 70%, 45%);
 }
 
-/* Table Styling */
 table {
   width: 100%;
   border-collapse: collapse;

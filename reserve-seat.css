@@ -1,12 +1,9 @@
-/* General body styling */
 body {
     font-family: Arial, sans-serif;
     background-color: #f2f2f2;
     margin: 0;
     padding: 20px;
 }
-
-/* Container for the whole bus layout */
 .bus-container {
     max-width: 900px;
     margin: auto;
@@ -15,8 +12,6 @@ body {
     box-shadow: 0 0 15px rgba(0,0,0,0.1);
     padding: 20px 30px;
 }
-
-/* Driver seat / header section */
 .driver-seat {
     text-align: center;
     margin-bottom: 30px;
@@ -29,16 +24,12 @@ body {
     font-size: 16px;
     color: #444;
 }
-
-/* Layout for rows of seats */
 .row {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom: 10px;
 }
-
-/* A single seat */
 .seat {
     width: 50px;
     height: 50px;
@@ -54,33 +45,23 @@ body {
     transition: 0.3s ease;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-
-/* Available seat style */
 .seat.available {
     background-color: green;
     color: #fff;
 }
-
-/* Reserved seat style */
 .seat.reserved {
     background-color: red;
     color: #fff;
     cursor: not-allowed;
 }
-
-/* Seat hover effect */
 .seat.available:hover {
     background-color: #006400;
 }
-
-/* Aisle space between left and right */
 .aisle {
     width: 50px;
     height: 50px;
     margin: 5px;
 }
-
-/* Notification message box */
 .notification {
     position: fixed;
     top: 20px;

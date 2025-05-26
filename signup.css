@@ -1,22 +1,17 @@
-/* Global Reset */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
-/* Body Styles */
 body {
   font-family: 'Montserrat', sans-serif;
-  background-color: #f5f5dc; /* soft beige */
+  background-color: #f5f5dc;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 }
-
-/* Main Container */
 .signup-container {
   display: flex;
   background: #ffffff;
@@ -26,8 +21,6 @@ body {
   max-width: 850px;
   width: 100%;
 }
-
-/* Left Panel */
 .signup-left {
   background: linear-gradient(135deg, #ff9d00, #ffc473);
   color: #fff;
@@ -87,8 +80,6 @@ body {
   color: #fff;
   border-color: #ff8000;
 }
-
-/* Right Panel */
 .signup-right {
   flex: 1.2;
   padding: 20px 16px;
@@ -97,10 +88,8 @@ body {
   align-items: center;
   justify-content: space-evenly;
   background: #ffffff;
-  overflow: hidden; /* 🔥 No scrollbars */
+  overflow: hidden; 
 }
-
-/* Form */
 .signup-form {
   width: 100%;
   max-width: 300px;

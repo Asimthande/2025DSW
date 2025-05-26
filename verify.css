@@ -1,7 +1,6 @@
-/* Body Styling */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f5f5dc; /* Beige background */
+    background-color: #f5f5dc; 
     margin: 0;
     padding: 0;
     display: flex;
@@ -9,8 +8,6 @@ body {
     align-items: center;
     height: 100vh;
 }
-
-/* Main container */
 .container {
     background-color: white;
     padding: 40px;
@@ -19,25 +16,22 @@ body {
     width: 100%;
     max-width: 450px;
     text-align: center;
-    border: 2px solid #ff7f50; /* Orange border */
+    border: 2px solid #ff7f50;
 }
-
-/* Header */
 h2 {
-    color: #ff7f50; /* Orange color for heading */
+    color: #ff7f50;
     margin-bottom: 20px;
     font-size: 24px;
 }
-
-/* Form */
 .verification-form {
     margin-top: 20px;
 }
 
 .verify-btn {
+    margin-top:12px;
     padding: 12px 25px;
     font-size: 18px;
-    background-color: #ff7f50; /* Orange button */
+    background-color: #ff7f50;
     color: white;
     border: none;
     border-radius: 30px;
@@ -46,38 +40,34 @@ h2 {
 }
 
 .verify-btn:hover {
-    background-color: #e76f3d; /* Darker orange for hover */
-    transform: scale(1.05); /* Slight scale effect for hover */
+    background-color: #e76f3d;
+    transform: scale(1.05);
 }
 
-input[type="text"] {
+input[type="text"],input[type="email"] {
     padding: 12px 20px;
     width: 100%;
     font-size: 16px;
     margin-top: 15px;
     border-radius: 6px;
-    border: 2px solid #ff7f50; /* Orange border */
+    border: 2px solid #ff7f50;
     box-sizing: border-box;
     transition: border 0.3s ease;
 }
 
 input[type="text"]:focus {
-    border-color: #e76f3d; /* Darker orange when focused */
+    border-color: #e76f3d;
     outline: none;
 }
 
 input[type="text"]::placeholder {
-    color: #ff7f50; /* Orange placeholder text */
+    color: #ff7f50;
 }
-
-/* Error message */
 .error-message {
-    color: #e74c3c; /* Red for error messages */
+    color: #e74c3c; 
     font-size: 18px;
     margin-top: 20px;
 }
-
-/* Responsive Design */
 @media (max-width: 600px) {
     .container {
         padding: 20px;
