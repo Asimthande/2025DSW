@@ -19,10 +19,9 @@ let messageSent = false;
 let studentsVisible = false;
 
 function setup() {
-  // Get the bus-stop-animation section to attach the canvas
   let busStopSection = document.querySelector('.bus-stop-animation');
-  let canvas = createCanvas(busStopSection.offsetWidth, 400); // Adjust width dynamically
-  canvas.parent(busStopSection); // Attach canvas to the section
+  let canvas = createCanvas(busStopSection.offsetWidth, 400);
+  canvas.parent(busStopSection);
   textSize(16);
 
   for (let i = 0; i < 3; i++) {

@@ -1,6 +1,3 @@
-// Settings.js
-
-// Handle form submissions (simulating save functionality)
 document.getElementById('account-form').addEventListener('submit', function(event) {
     event.preventDefault();
     alert('Account settings saved successfully!');

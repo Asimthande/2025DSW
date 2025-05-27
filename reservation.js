@@ -53,26 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const formData = new FormData(this);
-
-    fetch(window.location.href, {
-      method: "POST",
-      body: formData
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.status === 'success') {
-          confirmation.textContent = "Bus successfully booked! Redirecting to seat selection...";
-          confirmation.style.color = "green";
-          setTimeout(() => window.location.href = "reserve-seat.php", 2000);
-        } else {
-          confirmation.textContent = data.message || "Unable to book.";
-          confirmation.style.color = "red";
-        }
-      })
-      .catch(err => {
-        confirmation.textContent = "Unable to book due to network error.";
-        confirmation.style.color = "red";
-      });
+    confirmation.textContent = "Bus booking simulated successfully!";
+    confirmation.style.color = "green";
   });
 });

@@ -1,27 +1,19 @@
-// Fetch data from admin_chart_data.php
 fetch('admin_chart_data.php')
     .then(response => response.json())
     .then(data => {
-        // Total Students
         const totalStudents = data.total_students;
-        // Verified and Unverified Students
         const verifiedStudents = data.students_verified;
         const unverifiedStudents = data.students_unverified;
 
-        // Drivers
         const totalDrivers = data.drivers;
 
-        // Location Counts for the Chart
         const locationDates = data.location_dates;
         const locationCounts = data.location_counts;
 
-        // Notifications
         const totalNotifications = data.notifications;
 
-        // Update the display with the total number of students
         document.getElementById('totalStudents').textContent = `Total Students: ${totalStudents}`;
 
-        // Chart for Students - Verified vs Unverified
         new Chart(document.getElementById('studentsChart'), {
             type: 'bar',
             data: {
@@ -45,8 +37,6 @@ fetch('admin_chart_data.php')
                 }
             }
         });
-
-        // Chart for Drivers
         new Chart(document.getElementById('driversChart'), {
             type: 'bar',
             data: {
@@ -70,8 +60,6 @@ fetch('admin_chart_data.php')
                 }
             }
         });
-
-        // Location History Chart (Bar chart)
         new Chart(document.getElementById('locationHistoryChart'), {
             type: 'bar',
             data: {
@@ -95,8 +83,6 @@ fetch('admin_chart_data.php')
                 }
             }
         });
-
-        // Notifications Chart (Bar chart)
         new Chart(document.getElementById('notificationsChart'), {
             type: 'bar',
             data: {

@@ -1,21 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
     const body = document.body;
-    const month = new Date().getMonth(); // 0 = Jan, 11 = Dec
+    const month = new Date().getMonth(); 
     let season = '';
 
     if (month >= 5 && month <= 7) {
-        season = 'winter'; // June - August
+        season = 'winter'; 
     } else if (month >= 8 && month <= 10) {
-        season = 'spring'; // September - November
+        season = 'spring';
     } else if (month === 11 || month === 0 || month === 1) {
-        season = 'summer'; // December - February
+        season = 'summer'; 
     } else {
-        season = 'autumn'; // March - May
+        season = 'autumn'; 
     }
 
-    // Add season class to body
+    
     body.classList.add(`season-${season}`);
 
-    // Optional: log it for debugging
+
     console.log(`Detected season: ${season}`);
 });

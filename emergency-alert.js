@@ -1,4 +1,4 @@
-let map = L.map('map').setView([-26.2, 28.0], 10); // Centered in Gauteng
+let map = L.map('map').setView([-26.2, 28.0], 10);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'

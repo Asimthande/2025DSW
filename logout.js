@@ -1,6 +1,3 @@
-// logout.js
-
-// Array of fun messages
 const funMessages = [
     "Oops! Looks like you’ve been logged out. But hey, it happens!",
     "Well, you gave it a good try! Come back soon!",
@@ -25,39 +22,23 @@ const funMessages = [
     "Goodbye for now. We know you’ll be back before we know it!",
     "That’s one way to close the door... but we’ll leave the window open!"
 ];
-
-// Handle "Go to Homepage" button click
 document.getElementById('home-btn').addEventListener('click', function() {
-    // Redirect to the homepage (you can adjust the URL)
-    window.location.href = '/index.php';  // Example redirect to homepage
+    window.location.href = '/index.php';
 });
-
-// Handle "Log In Again" button click
 document.getElementById('login-btn').addEventListener('click', function() {
-    // Redirect to the signin.php page located in the DSW folder
-    window.location.href = '/DSW/signin.php';  // Absolute path from the root directory
+    window.location.href = '/DSW/signin.php'; 
 });
-
-// Display fun messages at 7-second intervals
 let messageIndex = 0;
 
 function showFunMessage() {
     const messageElement = document.getElementById('fun-message');
     
     messageElement.textContent = funMessages[messageIndex];
-    messageElement.style.display = 'block';  // Make the message visible
-
-    // Hide the message after 5 seconds
+    messageElement.style.display = 'block';
     setTimeout(() => {
         messageElement.style.display = 'none';
-    }, 5000); // Hide after 5 seconds
-
-    // Increment message index and loop back to the start if necessary
+    }, 5000);
     messageIndex = (messageIndex + 1) % funMessages.length;
 }
-
-// Show a fun message every 7 seconds
 setInterval(showFunMessage, 7000);
-
-// Initial call to show the first message immediately
 showFunMessage();

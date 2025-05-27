@@ -1,12 +1,9 @@
-// ===================== MAP INITIALIZATION FOR USER ===========================
 var map = L.map('map', { zoomControl: false }).setView([-26.20002778, 28.0551667], 17);
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
-
-// ===================== USER LOCATION TRACKING ===========================
 let main_lat = 0;
 let main_lng = 0;
 let marker, circle;
@@ -50,8 +47,6 @@ function error(err) {
         alert("Unable to retrieve location.");
     }
 }
-
-// ===================== WEATHER ===========================
 async function getWeather() {
     try {
         const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${main_lat}&longitude=${main_lng}&current_weather=true`);
@@ -83,18 +78,17 @@ async function getWeather() {
 setInterval(getWeather, 1000);
 getWeather();
 
-// ===================== TRACKING MAP FOR ALL BUSES ===========================
 let trackingMap;
 let busMarkers = {};
 
 function initTrackingMap() {
-    trackingMap = L.map('tracking-map'); // No default view
+    trackingMap = L.map('tracking-map'); 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(trackingMap);
 
-    fetchAllBusLocations(); // Load once
-    setInterval(fetchAllBusLocations, 5000); // Update every 5s
+    fetchAllBusLocations(); 
+    setInterval(fetchAllBusLocations, 5000);
 }
 
 function fetchAllBusLocations() {
@@ -109,9 +103,7 @@ function fetchAllBusLocations() {
                 const lon = parseFloat(bus.Longitude);
                 const updateTime = bus.UpdateTime;
 
-                bounds.push([lat, lon]); // For fitBounds
-
-                // Create or update markers
+                bounds.push([lat, lon]); 
                 if (busMarkers[id]) {
                     busMarkers[id].setLatLng([lat, lon]);
                     busMarkers[id].setPopupContent(`<strong>Bus:</strong> ${id}<br><strong>Updated:</strong> ${updateTime}`);
@@ -127,8 +119,6 @@ function fetchAllBusLocations() {
                     busMarkers[id] = marker;
                 }
             });
-
-            // Adjust zoom automatically to fit all markers
             if (bounds.length > 0) {
                 trackingMap.fitBounds(bounds, {
                     padding: [50, 50],
@@ -143,7 +133,6 @@ document.addEventListener("DOMContentLoaded", function () {
     initTrackingMap();
 });
 
-// ===================== SIDEBAR TOGGLE ===========================
 document.addEventListener('DOMContentLoaded', () => {
     const menuBtn = document.getElementById('menu-btn');
     const bellBtn = document.getElementById('bell-btn');
