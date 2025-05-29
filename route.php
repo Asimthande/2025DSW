@@ -1,15 +1,10 @@
 <?php
-// Start the session to check if the user is logged in
 session_start();
-
-// Check if the role session variable is set and if the role is 'student'
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'student') {
-    // Redirect to login page if the user is not a student
     header("Location: login.php");
     exit();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,6 +21,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'student') {
     <div class="view-toggle">
         <button id="table-view-btn">Table View</button>
         <button id="picture-view-btn">Route Picture View</button>
+        <link rel="icon" type="image/jpeg" href="images/Stabus.jpeg">
     </div>
     <div id="table-view" class="view">
         <table id="routes-table">

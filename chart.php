@@ -10,8 +10,6 @@ include 'partial/connect.php';
 
 $chartType = isset($_GET['chartType']) ? $_GET['chartType'] : 'bus_requests';
 $range = isset($_GET['range']) ? $_GET['range'] : 'daily';
-
-// Date filter based on selected range
 switch ($range) {
     case 'weekly':
         $dateFilter = "booking_time >= DATE_SUB(NOW(), INTERVAL 7 DAY)";

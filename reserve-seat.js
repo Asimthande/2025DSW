@@ -5,12 +5,16 @@ document.addEventListener("DOMContentLoaded", function() {
     for (let row = 0; row < 12; row++) { 
         let rowHTML = '<div class="row">';
         for (let col = 0; col < 5; col++) {
+            const seatLabelLeft = "L" + seatCount;
+            rowHTML += createSeatHTML(seatLabelLeft, reservedSeats);
+            seatCount++;
             if (col === 2) {
                 rowHTML += '<div class="aisle"></div>';
             }
-            const seatLabel = (col < 3 ? "L" : "R") + seatCount;
-            rowHTML += createSeatHTML(seatLabel, reservedSeats);
-            seatCount++;
+            if (col === 4) {
+                const seatLabelRight = "R" + (seatCount - 1);
+                rowHTML += createSeatHTML(seatLabelRight, reservedSeats);
+            }
         }
         rowHTML += '</div>';
         seatContainer.innerHTML += rowHTML;

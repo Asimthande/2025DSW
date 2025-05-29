@@ -15,6 +15,7 @@ $students = mysqli_query($conn, "SELECT ID, StudentNumber, FirstName, LastName, 
     <meta charset="UTF-8">
     <title>Manage Users</title>
     <link rel="stylesheet" href="admin.css">
+        <link rel="icon" type="image/jpeg" href="images/Stabus.jpeg">
 </head>
 <body>
 <div class="admin-container">

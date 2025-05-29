@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Bus Tracking</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link rel="icon" type="image/jpeg" href="images/Stabus.jpeg" />
+
     <style>
         body {
             margin: 0;
@@ -25,6 +30,14 @@
         .control-panel label {
             font-weight: bold;
             margin-right: 15px;
+        }
+
+        .control-panel a {
+            display: inline-block;
+            margin-bottom: 10px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
         }
 
         select {
@@ -59,81 +72,73 @@
     </style>
 </head>
 <body>
+    <div class="control-panel">
+        <div class="back-button">
+            <a href="dashboard.php">&larr; Back to Dashboard</a>
+        </div>
+        <label for="bus-select">Select Bus To Track:</label>
+        <select id="bus-select">
+            <?php for ($i = 1; $i <= 10; $i++): ?>
+                <option value="<?= $i ?>">Bus <?= $i ?></option>
+            <?php endfor; ?>
+        </select>
+    </div>
 
-<div class="control-panel">
-<div class="back-button">
-    <a href="dashboard.php">&larr; Back to Dashboard</a>
-</div>
-    <label for="bus-select">Select Bus To Track:</label>
-    <select id="bus-select">
-        <?php for ($i = 1; $i <= 10; $i++): ?>
-            <option value="<?= $i ?>">Bus <?= $i ?></option>
-        <?php endfor; ?>
-    </select>
-</div>
+    <div id="map"></div>
 
-<div id="map"></div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        let map = L.map('map').setView([0, 0], 15);
+        let marker = null;
+        let selectedBusID = document.getElementById("bus-select").value;
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
 
-<script>
-    let map = L.map('map').setView([0, 0], 15)
-    let marker = null
-    let selectedBusID = document.getElementById("bus-select").value
+        function createLabeledMarker(lat, lng, busID) {
+            const label = `<div class="bus-label">Bus ${busID}</div>`;
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map)
+            const labelIcon = L.divIcon({
+                className: '',
+                html: label,
+                iconSize: null
+            });
 
-    function createLabeledMarker(lat, lng, busID) {
-        const label = `<div class="bus-label">Bus ${busID}</div>`
-        const originalMarker = L.icon({
-            iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-            iconSize: [20, 32],
-            iconAnchor: [10, 32],
-            popupAnchor: [0, -32]
-        })
+            const labelMarker = L.marker([lat, lng], { icon: labelIcon }).addTo(map);
+            const busMarker = L.marker([lat, lng]).addTo(map);
 
-        const customHtml = L.divIcon({
-            className: '',
-            html: label,
-            iconSize: null,
-        })
+            return [labelMarker, busMarker];
+        }
 
-        const labelMarker = L.marker([lat, lng], { icon: customHtml }).addTo(map)
-        const mainMarker = L.marker([lat, lng], { icon: originalMarker }).addTo(map)
+        function fetchLocation(centerMap = false) {
+            $.getJSON("bus-location.php?BusID=" + selectedBusID, function (data) {
+                if (data && data.Latitude && data.Longitude) {
+                    const lat = parseFloat(data.Latitude);
+                    const lng = parseFloat(data.Longitude);
 
-        return [labelMarker, mainMarker]
-    }
+                    if (marker) {
+                        marker.forEach(m => map.removeLayer(m));
+                    }
 
-    function fetchLocation(centerMap = false) {
-        $.getJSON("fetch_location.php?BusID=" + selectedBusID, function (data) {
-            if (data && data.Latitude && data.Longitude) {
-                const lat = parseFloat(data.Latitude)
-                const lng = parseFloat(data.Longitude)
+                    marker = createLabeledMarker(lat, lng, selectedBusID);
 
-                if (marker) {
-                    marker.forEach(m => map.removeLayer(m))
+                    if (centerMap) {
+                        map.setView([lat, lng], 15);
+                    }
                 }
+            });
+        }
 
-                marker = createLabeledMarker(lat, lng, selectedBusID)
-                if (centerMap) {
-                    map.setView([lat, lng], 15)
-                }
-            }
-        })
-    }
+        fetchLocation(true);
+        setInterval(() => fetchLocation(false), 1000);
 
-    fetchLocation(true)
-    setInterval(() => fetchLocation(false), 2000)
-
-    document.getElementById("bus-select").addEventListener("change", function () {
-        selectedBusID = this.value
-        fetchLocation(true)
-    })
-</script>
-<script src="language.js"></script>
+        document.getElementById("bus-select").addEventListener("change", function () {
+            selectedBusID = this.value;
+            fetchLocation(true);
+        });
+    </script>
 </body>
 </html>

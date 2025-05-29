@@ -42,6 +42,7 @@ if (!$result) {
     <meta charset="UTF-8" />
     <title>Bus Schedules</title>
     <link rel='stylesheet' href='schedule.css'>
+        <link rel="icon" type="image/jpeg" href="images/Stabus.jpeg">
 </head>
 <body>
 <div class="container">
@@ -64,8 +65,6 @@ if (!$result) {
         <button id="table-view">Table View</button>
         <button id="list-view" class="active">List View</button>
     </div>
-
-    <!-- Table View -->
     <div id="table-view-container" style="display:none;">
         <table>
             <thead>
@@ -88,12 +87,9 @@ if (!$result) {
             </tbody>
         </table>
     </div>
-
-    <!-- List View -->
     <div id="list-view-container">
         <ul>
             <?php 
-            // Reset pointer for list view
             $result->data_seek(0);
             while ($row = $result->fetch_assoc()): ?>
             <li>

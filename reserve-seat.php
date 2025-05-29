@@ -1,110 +1,149 @@
 <?php
 session_start();
-
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'student') {
-    header("Location: login.php");
+if (!isset($_SESSION['seat']) || !isset($_SESSION['bus_id'])) {
+    header("Location: reservation.php");
     exit();
 }
 
 include "partial/connect.php";
 
-// Fetch the current booking details
-$bookingId = $_SESSION['booking_id'];  // Assume booking_id is stored in session
-$sql = "SELECT bus_id, booking_time FROM tblBookings WHERE booking_id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $bookingId);
-$stmt->execute();
-$result = $stmt->get_result();
+$busId = $_SESSION['bus_id'];
+$userSeat = $_SESSION['seat'];
 
-if ($result->num_rows === 0) {
-    echo "No booking found!";
-    exit();
-}
+$query = $conn->prepare("SELECT seats FROM tblBuses WHERE bus_id = ?");
+$query->bind_param("i", $busId);
+$query->execute();
+$query->bind_result($totalSeats);
+$query->fetch();
+$query->close();
 
-$booking = $result->fetch_assoc();
-$busId = $booking['bus_id'];
-$currentHour = date('H', strtotime($booking['booking_time']));
-
-// Get reserved seats at the same hour and bus_id
-$sql = "SELECT reserved_seat FROM tblBookings 
-        WHERE bus_id = ? AND HOUR(booking_time) = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ii", $busId, $currentHour);
-$stmt->execute();
-$result = $stmt->get_result();
-
-$reservedSeats = [];
-while ($row = $result->fetch_assoc()) {
-    $reservedSeats[] = $row['reserved_seat'];
-}
+$seatsPerRow = 5;
+$leftSeats = 2;
+$rightSeats = 3;
+$rows = ceil($totalSeats / $seatsPerRow);
+$seatNumber = 1;
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reserve Seat</title>
-    <link rel="stylesheet" href="reserve-seat.css">
+    <title>Reserved Seat Layout</title>
+        <link rel="icon" type="image/jpeg" href="images/Stabus.jpeg">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .bus-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .bus-info {
+            margin-bottom: 30px;
+        }
+        .seat-layout {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .left-side, .right-side {
+            display: flex;
+            gap: 10px;
+        }
+        .aisle {
+            width: 40px;
+        }
+        .seat {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: default;
+        }
+        .available {
+            background-color: #008800;
+        }
+        .reserved {
+            background-color: #cc0000;
+        }
+        .legend {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .legend-box {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+        .green-box {
+            background-color: #008800;
+        }
+        .red-box {
+            background-color: #cc0000;
+        }
+    </style>
 </head>
 <body>
     <div class="bus-container">
-        <div class="driver-seat">
-            <div class="bus-plate">BUS-<?php echo $busId; ?></div>
-            <div class="driver-id">Driver ID: 987654</div>
-            Driver
+        <div class="bus-info">
+            <h2>BUS-<?php echo $busId; ?></h2>
+            <p><strong>Your Reserved Seat:</strong> <?php echo $userSeat; ?></p>
         </div>
 
-        <!-- Dynamically generate seats using PHP and JavaScript -->
-        <div id="seats-layout">
-            <!-- Seat layout will be injected here by JS -->
-        </div>
-    </div>
+        <?php
+        for ($row = 1; $row <= $rows; $row++) {
+            echo '<div class="seat-layout">';
 
-    <!-- Modal for notification -->
-    <div id="seatNotification" class="notification">
-        <p id="seatMessage"></p>
-    </div>
-
-    <script src="reserve-seat.js"></script>
-    <script>
-        // Create the seat layout dynamically in JavaScript
-        document.addEventListener("DOMContentLoaded", function() {
-            const reservedSeats = <?php echo json_encode($reservedSeats); ?>;
-            const seatContainer = document.getElementById('seats-layout');
-            let seatCount = 1;
-
-            // Create 12 rows for 60 seats
-            for (let row = 0; row < 12; row++) { // 12 rows for 60 seats
-                let rowHTML = '<div class="row">';
-                for (let col = 0; col < 5; col++) {
-                    // Left seats (seat1, seat2, seat6, seat7, ...)
-                    const seatLabelLeft = "L" + seatCount;
-                    rowHTML += createSeatHTML(seatLabelLeft, reservedSeats);
-                    seatCount++;
-
-                    // Aisle in between
-                    if (col === 2) {
-                        rowHTML += '<div class="aisle"></div>';
-                    }
-
-                    // Right seats (seat3, seat4, seat8, seat9, ...)
-                    if (col === 4) {
-                        const seatLabelRight = "R" + (seatCount - 1);
-                        rowHTML += createSeatHTML(seatLabelRight, reservedSeats);
-                    }
-                }
-                rowHTML += '</div>';
-                seatContainer.innerHTML += rowHTML;
+            echo '<div class="left-side">';
+            for ($left = 1; $left <= $leftSeats; $left++) {
+                if ($seatNumber > $totalSeats) break;
+                $seatClass = ($seatNumber == $userSeat) ? 'reserved' : 'available';
+                $seatLabel = "L" . $seatNumber;
+                echo "<div class='seat $seatClass'>$seatLabel</div>";
+                $seatNumber++;
             }
-        });
+            echo '</div>';
 
-        // Function to create the HTML for each seat (reserved or available)
-        function createSeatHTML(seatLabel, reservedSeats) {
-            const isReserved = reservedSeats.includes(seatLabel); // Check if seat is reserved
-            const seatClass = isReserved ? 'reserved' : 'available'; // Add the appropriate class for the seat
-            return `<div class="seat ${seatClass}" id="${seatLabel}">${seatLabel}</div>`;
+            echo '<div class="aisle"></div>';
+
+            
+            echo '<div class="right-side">';
+            for ($right = 1; $right <= $rightSeats; $right++) {
+                if ($seatNumber > $totalSeats) break;
+                $seatClass = ($seatNumber == $userSeat) ? 'reserved' : 'available';
+                $seatLabel = "R" . $seatNumber;
+                echo "<div class='seat $seatClass'>$seatLabel</div>";
+                $seatNumber++;
+            }
+            echo '</div>';
+
+            echo '</div>';
         }
-    </script>
+        ?>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-box green-box"></div>
+                <span>Available Seat</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box red-box"></div>
+                <span>Your Reserved Seat</span>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

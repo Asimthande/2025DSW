@@ -6,9 +6,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-require_once "partial/connect.php"; // Your DB connection
-
-// Fetch all maintenance records
+require_once "partial/connect.php";
 $sql = "SELECT MaintainID, BusID, Date, `Estimated Return`, `Maintainance Type`, AdminID FROM Maintain";
 $result = mysqli_query($conn, $sql);
 
@@ -28,6 +26,7 @@ if ($result) {
     <meta charset="UTF-8">
     <title>Buses Under Maintenance</title>
     <link rel="stylesheet" href="maintainance.css">
+        <link rel="icon" type="image/jpeg" href="images/Stabus.jpeg">
 </head>
 <body>
 
@@ -38,8 +37,6 @@ if ($result) {
         <button id="list-view-btn">List View</button>
         <button id="grid-view-btn">Grid View</button>
     </div>
-
-    <!-- List View -->
     <div id="list-view" class="view">
         <table>
             <thead>
@@ -64,8 +61,6 @@ if ($result) {
             </tbody>
         </table>
     </div>
-
-    <!-- Grid View -->
     <div id="grid-view" class="view" style="display: none;">
         <div class="grid-container">
             <?php foreach ($buses as $bus): ?>

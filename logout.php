@@ -11,6 +11,7 @@ session_destroy();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logout</title>
     <link rel="stylesheet" href="logout.css">
+        <link rel="icon" type="image/jpeg" href="images/Stabus.jpeg">
 </head>
 <body>
 
@@ -19,7 +20,7 @@ session_destroy();
     <p>We're sorry to see you go. Would you like to return to the homepage or log in again?</p>
 
     <div class="buttons">
-        <a href="index.php"><button class="btn">Go to Homepage</button></a>
+        <a href="index.html"><button class="btn">Go to Homepage</button></a>
         <a href="signin.php"><button class="btn">Log In Again</button></a>
     </div>
 

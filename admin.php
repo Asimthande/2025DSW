@@ -1,7 +1,8 @@
 <?php
 session_start();
+include 'partial/connect.php';
 
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header("Location: signin.php");
     exit();
 }
@@ -10,12 +11,24 @@ require_once "partial/connect.php";
 
 $first_name = $_SESSION['first_name'];
 $last_name = $_SESSION['last_name'];
-$email = $_SESSION['email'];
-$tables = [
-    'tblQueuePositions', 'tblNotificationsSettings', 'tblNotifications', 'tblDrivers',
-    'tblBusSchedules', 'tblBusRoutes', 'tblBuses', 'tblBusCapacity', 'tblBookings',
-    'Students', 'location_history', 'live', 'Emergency', 'Admins'
+$email = $_SESSION['email'];$tables = [
+    "Admins",
+    "Emergency",
+    "Maintain",
+    "Students",
+    "live",
+    "location_history",
+    "questions",
+    "tblBookings",
+    "tblBusCapacity",
+    "tblBusRoutes",
+    "tblBusSchedules",
+    "tblBuses",
+    "tblDrivers",
+    "tblNotifications",
+    "tblQueuePositions"
 ];
+
 
 $students = mysqli_query($conn, "SELECT COUNT(*) AS total FROM Students");
 $students_total = mysqli_fetch_assoc($students)['total'];
@@ -48,7 +61,9 @@ $notifications_total = mysqli_fetch_assoc($notifications)['total'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="admin.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>    
+    <link rel="icon" type="image/jpeg" href="stabus.jpeg">
+
 </head>
 <body>
 

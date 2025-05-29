@@ -15,14 +15,8 @@ $first_name = $_SESSION['first_name'];
 $last_name = $_SESSION['last_name'];
 $email = $_SESSION['email'];
 $student_number = $_SESSION['student_number'];
-
-// Include the database connection
 include('partial/connect.php');
-
-// Default to fetching from tblNotifications
 $sortBy = isset($_GET['sort']) ? $_GET['sort'] : 'newest';
-
-// Fetch notifications based on selected sort order
 $sql = "SELECT student_number, message, timestamp, status 
         FROM tblNotifications 
         WHERE student_number = ? 
@@ -61,6 +55,7 @@ $stmt->close();
     <title>Notification Center</title>
     <link rel="stylesheet" href="notifications.css">    
     <link rel="stylesheet" href="back.css">
+        <link rel="icon" type="image/jpeg" href="images/Stabus.jpeg">
 </head>
 <body>
     <div class="notification-center">
@@ -68,7 +63,6 @@ $stmt->close();
 <div class="back-button">
     <a href="dashboard.php">&larr; Back to Dashboard</a>
 </div>
-        <!-- Sort Notifications -->
         <div class="filters">
             <div class="dropdown">
                 <label for="order-select">Sort Notifications:</label>
@@ -79,8 +73,6 @@ $stmt->close();
                 </select>
             </div>
         </div>
-
-        <!-- Notifications List -->
         <div class="notifications-list">
             <ul id="notifications-list">
                 <?php if (empty($notifications)): ?>

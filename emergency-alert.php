@@ -45,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="language.js"></script>
+        <link rel="icon" type="image/jpeg" href="images/Stabus.jpeg">
 </head>
 <body>
 <div class="container">
@@ -94,8 +95,6 @@ function logout() {
 
 let map;
 let marker;
-
-// Initialize Leaflet map
 window.onload = function () {
     map = L.map('map').setView([0, 0], 2);
 

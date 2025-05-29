@@ -35,6 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($stmt->execute()) {
                 session_start();
                 $_SESSION['student_number'] = $student_number;
+                $_SESSION['email']=$email;
+                $_SESSION['first_name']=$first_name;
                 header("Location: verify.php");
                 exit();
             } else {
@@ -52,11 +54,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
   <meta charset="UTF-8">
   <title>Sign Up</title>
+        <link rel="icon" type="image/jpeg" href="images/Stabus.jpeg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="signin.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <meta name="google-signin-client_id" content="72387172929-9dmud5cuo2s1dimnch974rk96as6c583.apps.googleusercontent.com">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+  function handleCredentialResponse(response) {
+    let studentNumber = document.getElementById("studentid");
+    let password=document.getElementById("password");
+    if (password.value.length < 8) {
+      alert("Please Enter A Password");
+      password.focus();
+      return;
+    }
+    if (studentNumber.value.length < 8) {
+      alert("Please Enter A Valid Student Number");
+      studentNumber.focus();
+      return;
+    }
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "google.php");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+xhr.onload = () => {
+    window.location.href = "verify.php";
+};
+
+
+const postData = "id_token=" + encodeURIComponent(response.credential) +
+                     "&student_number=" + encodeURIComponent(studentNumber.value)+
+                     "&password=" + encodeURIComponent(password.value);
+
+    xhr.send(postData);
+  }
+
+  window.onload = function () {
+    google.accounts.id.initialize({
+      client_id: "72387172929-9dmud5cuo2s1dimnch974rk96as6c583.apps.googleusercontent.com",
+      callback: handleCredentialResponse
+    });
+    google.accounts.id.renderButton(
+      document.getElementById("buttonDiv"),
+      { theme: "outline", size: "large" }
+    );
+  };
+</script>
+
+
 </head>
 <body>
   <div class="signup-container">
@@ -103,16 +151,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="input-group password-group">
           <label for="password">Password</label>
           <input type="password" id="password" name="password" required>
-          <span class="toggle-password" onclick="togglePassword()">👁</span>
+          <span class="toggle-password" onclick="togglePassword()">👁</span> 
+        <small id="passwordError" style="color:red; display:none;">Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.</small>
+
         </div>
         <div class="input-group password-group">
           <label for="confirm_password">Confirm Password</label>
           <input type="password" id="confirm_password" name="confirm_password" required>
         </div>
-        <button type="submit" class="signup-btn">Sign Up</button>
+        <button type="submit" class="signup-btn" id="signup" disabled>Sign Up</button>
+        <div id="forgot-password"><label><a href='forgot-password.php'>Forgot Password?</a></label></div>
         <div class="divider"><span>or</span></div>
         <div class="social-buttons">
-          <button type="button" class="google-btn" id="googleAuth" onclick="studentNumber()"><i class="fab fa-google"></i> Sign up with Google</button>
+            <div id="buttonDiv"></div>
           <button type="button" class="facebook-btn" id="facebookAuth" ><i class="fab fa-facebook-f"></i> Sign up with Facebook</button>
         </div>
         <p class="login-link">Already have an account? <a href="signin.php">Log in</a></p>
@@ -125,7 +176,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       const pw = document.getElementById('password');
       pw.type = pw.type === 'password' ? 'text' : 'password';
     }
+    function togglePassword() {
+  const input = document.getElementById('password');
+  input.type = input.type === 'password' ? 'text' : 'password';
+}
+
+function validatePassword(password) {
+  return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/.test(password);
+}
+
+const passwordInput = document.getElementById('password');
+const signupBtn = document.getElementById('signup');
+const errorMsg = document.getElementById('passwordError');
+
+passwordInput.addEventListener('input', () => {
+  if (validatePassword(passwordInput.value)) {
+    signupBtn.disabled = false;
+    errorMsg.style.display = 'none';
+  } else {
+    signupBtn.disabled = true;
+    errorMsg.style.display = 'block';
+  }
+});
+
   </script>
-  <script src="google.js"></script>
 </body>
 </html>

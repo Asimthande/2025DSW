@@ -11,7 +11,6 @@ if (!isset($_SESSION['user_id'])) {
 
 require_once "partial/connect.php";
 
-// Fetch the logged-in user's role
 $user_id = $_SESSION['user_id'];
 $query = "SELECT role_id FROM Admins WHERE ID = ?";
 $stmt = mysqli_prepare($conn, $query);
@@ -25,21 +24,19 @@ if ($stmt) {
     die("Error preparing query: " . mysqli_error($conn));
 }
 
-// Check if the logged-in user is an admin (role_id = 1)
 if ($role_id !== 1) {
     header("Location: admin.php");
     exit();
 }
 
-// Handle Add Admin Form
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_admin'])) {
     $first_name = $_POST['FirstName'];
     $last_name = $_POST['LastName'];
     $email = $_POST['Email'];
     $password = password_hash($_POST['Password'], PASSWORD_DEFAULT);
-    $role_id = $_POST['role_id'];  // Admin role
+    $role_id = $_POST['role_id']; 
     $end_of_contract = $_POST['EndOfContract'];
-    $state = $_POST['state'];  // 1 for verified, 0 for unverified
+    $state = $_POST['state'];
 
     $sql = "INSERT INTO Admins (FirstName, LastName, Email, Password, role_id, EndOfContract, state) 
             VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -58,15 +55,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_admin'])) {
     }
 }
 
-// Handle Update Admin Form
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_admin'])) {
     $admin_id = $_POST['ID'];
     $first_name = $_POST['FirstName'];
     $last_name = $_POST['LastName'];
     $email = $_POST['Email'];
-    $role_id = $_POST['role_id'];  // Admin role
+    $role_id = $_POST['role_id'];
     $end_of_contract = $_POST['EndOfContract'];
-    $state = $_POST['state'];  // 1 for verified, 0 for unverified
+    $state = $_POST['state'];
 
     $sql = "UPDATE Admins SET FirstName = ?, LastName = ?, Email = ?, role_id = ?, EndOfContract = ?, state = ? WHERE ID = ?";
 
@@ -83,8 +79,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_admin'])) {
         $message = "Error preparing query: " . mysqli_error($conn);
     }
 }
-
-// Handle Remove Admin Form
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_admin'])) {
     $admin_id = $_POST['ID'];
 
@@ -122,8 +116,6 @@ mysqli_close($conn);
         <?php if (isset($message)): ?>
             <p class="<?= strpos($message, 'Error') === false ? 'success' : 'error' ?>"><?= $message ?></p>
         <?php endif; ?>
-
-        <!-- Add Admin Form -->
         <div class="form-container">
             <h2>Add New Admin</h2>
             <form method="POST" action="admin-management.php">
@@ -150,8 +142,6 @@ mysqli_close($conn);
                 <button class="button" type="submit" name="add_admin">Add Admin</button>
             </form>
         </div>
-
-        <!-- Update Admin Form -->
         <div class="form-container">
             <h2>Update Admin</h2>
             <form method="POST" action="admin-management.php">
@@ -193,8 +183,6 @@ mysqli_close($conn);
                 <button class="button" type="submit" name="update_admin">Update Admin</button>
             </form>
         </div>
-
-        <!-- Remove Admin Form -->
         <div class="form-container">
             <h2>Remove Admin</h2>
             <form method="POST" action="admin-management.php">
@@ -218,8 +206,6 @@ mysqli_close($conn);
                 <button class="button" type="submit" name="remove_admin">Remove Admin</button>
             </form>
         </div>
-
-        <!-- Admin List -->
         <h2>Admin List</h2>
         <table>
             <thead>

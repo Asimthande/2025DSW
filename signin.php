@@ -1,14 +1,10 @@
 <?php
 session_start();
-
-// Include the database connection file
-include('partial/connect.php');  // This includes the connection from partial/connect.php
+include('partial/connect.php');
 require_once __DIR__.'/vendor/autoload.php';
 require_once __DIR__.'/config.php';
 
 $errorMessage = "";
-
-// Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $role = $_POST['role'] ?? '';
     $email = $_POST['email'] ?? '';
@@ -17,7 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($role) || empty($email) || empty($password)) {
         $errorMessage = "Please fill all fields correctly!";
     } else {
-        // Define roles and their corresponding tables
         $roles = [
             "admin" => ["Admins", "admin.php"],
             "driver" => ["tblDrivers", "driver.php"],
@@ -28,8 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errorMessage = "Invalid role selected.";
         } else {
             list($table, $redirect) = $roles[$role];
-
-            // Prepare SQL query to fetch user data from the corresponding table
             $sql = "SELECT * FROM $table WHERE Email = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("s", $email);
@@ -42,7 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $passwordMatch = password_verify($password, $dbPassword) || $password === $dbPassword;
 
                 if ($passwordMatch) {
-                    // Store user details in session
                     $_SESSION['user_id'] = $user['ID'];
                     $_SESSION['role'] = $role;
                     $_SESSION['first_name'] = $user['FirstName'] ?? '';
@@ -50,8 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION['email'] = $user['Email'] ?? '';
                     $_SESSION['bus_id'] = $user['BusID'];
                     $_SESSION['student_number'] = $user['StudentNumber'] ?? null;
-
-                    // Redirect to the role-specific page
                     if ($role === "student" && isset($user['state']) && $user['state'] == 0) {
                         header("Location: verify.php");
                         exit();
@@ -69,8 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $conn->close();
 }
-
-// Guest login functionality
 if (isset($_GET['guest_login']) && $_GET['guest_login'] === 'true') {
     $_SESSION['user_id'] = 'guest';
     $_SESSION['role'] = 'guest';
@@ -88,8 +76,32 @@ if (isset($_GET['guest_login']) && $_GET['guest_login'] === 'true') {
     <meta charset="UTF-8">
     <title>User Sign In</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="signin.css"> <!-- Use the same signup.css -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Add Font Awesome -->
+        <link rel="icon" type="image/jpeg" href="images/Stabus.jpeg">
+    <link rel="stylesheet" href="signin.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+ <script>
+     function handleCredentialResponse(response) {
+      
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "Google.php");
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      xhr.onload = () => {
+        alert("Response from server: " + xhr.responseText);
+      };
+      xhr.send("id_token=" + response.credential);
+    }
+
+    window.onload = function () {
+      google.accounts.id.initialize({
+        client_id: "72387172929-9dmud5cuo2s1dimnch974rk96as6c583.apps.googleusercontent.com",
+        callback: handleCredentialResponse
+      });
+      google.accounts.id.renderButton(
+        document.getElementById("buttonDiv"),
+        { theme: "outline", size: "large" }
+      );
+    };
+  </script>
 </head>
 <body>
   <div class="signup-container">
@@ -125,10 +137,11 @@ if (isset($_GET['guest_login']) && $_GET['guest_login'] === 'true') {
           <input type="password" id="password" name="password" required>
           <span class="toggle-password" onclick="togglePassword()">👁</span>
         </div>
+        <div id="forgot-password"><label><a href='forgot-password.php'>Forgot Password?</a></label></div>
         <button type="submit" class="signup-btn">Sign In</button>
         <div class="divider"><span>or</span></div>
         <div class="social-buttons">
-          <button type="button" class="google-btn" id="googleAuth"><i class="fab fa-google"></i> Sign in with Google</button>
+  <div id="buttonDiv"></div>
           <button type="button" class="facebook-btn"><i class="fab fa-facebook-f"></i> Sign in with Facebook</button>
         </div>
         <p class="login-link">Don't have an account? <a href="signup.php">Sign Up</a></p>
