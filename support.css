@@ -2,7 +2,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', sans-serif;
-    background-color: hsl(30, 30%, 95%);
+    background-color: #f5f5dc;
     color: #333;
 }
 
@@ -10,14 +10,14 @@ body {
     max-width: 800px;
     margin: 40px auto;
     padding: 20px;
-    background: white;
+    background: #fffaf0;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 10px rgba(255, 165, 0, 0.1);
 }
 
 h1, h2 {
     text-align: center;
-    color: hsl(10, 90%, 50%);
+    color: orange;
 }
 
 section {
@@ -32,7 +32,7 @@ section {
     width: 100%;
     padding: 15px;
     font-size: 1rem;
-    background-color: hsl(25, 80%, 60%);
+    background-color: orange;
     color: white;
     border: none;
     border-radius: 5px;
@@ -42,14 +42,14 @@ section {
 }
 
 .faq-question:hover {
-    background-color: hsl(25, 80%, 55%);
+    background-color: #e69500;
 }
 
 .faq-answer {
     display: none;
     padding: 10px 15px;
-    background-color: #f9f9f9;
-    border-left: 4px solid hsl(290, 70%, 55%);
+    background-color: #fdf6e3;
+    border-left: 4px solid #cc7000;
     margin-top: 5px;
     border-radius: 4px;
 }
@@ -62,18 +62,21 @@ form {
 form label {
     margin: 10px 0 5px;
     font-weight: bold;
+    color: #444;
 }
 
-form input, form textarea {
+form input,
+form textarea {
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #d4a373;
     border-radius: 5px;
+    background-color: #fffaf0;
 }
 
 .submit-btn {
     margin-top: 15px;
     padding: 12px;
-    background-color: hsl(290, 70%, 55%);
+    background-color: #cc7000;
     color: white;
     border: none;
     border-radius: 6px;
@@ -83,5 +86,5 @@ form input, form textarea {
 }
 
 .submit-btn:hover {
-    background-color: hsl(290, 70%, 50%);
+    background-color: #a65600;
 }

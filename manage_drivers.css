@@ -1,129 +1,163 @@
+/* Global Styles */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f1e9; 
     margin: 0;
-    padding: 0;
-}
-
-.container {
-    max-width: 1000px;
-    margin: 40px auto;
-    padding: 20px 40px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-h1, h2 {
-    text-align: center;
-    color: #d35400;
-    margin-bottom: 20px;
-}
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-thead {
-    background-color: #d35400;
-    color: white;
-}
-
-th, td {
-    padding: 12px 16px;
-    border-bottom: 1px solid #e0d7ca;
-    text-align: left;
-}
-
-tbody tr:nth-child(even) {
-    background-color: #f9f6f1;
-}
-
-tbody tr:hover {
-    background-color: #fdebd0;
-}
-form {
-    margin: 20px 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f0e6; /* Beige warm */
+    color: #4b2e00; /* Dark brownish text for warmth */
     padding: 20px;
-    background-color: #fefbf8;
-    border: 1px solid #e0d7ca;
-    border-radius: 8px;
 }
 
-label {
-    display: block;
-    margin-bottom: 6px;
-    color: #a05200;
-    font-weight: 600;
+h2 {
+    color: #cc7a00; /* Muted orange */
+    margin-top: 40px;
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 1px;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="date"],
-select {
+/* Form Containers */
+#add-driver-container,
+#all-drivers-container {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 30px;
+    background-color: #fff8f0; /* Light warm beige */
+    border: 1px solid #e6cfae;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(204, 122, 0, 0.15); /* softer orange shadow */
+    overflow-x: auto; /* For responsive tables */
+}
+
+/* Input Styles */
+form input[type="text"],
+form input[type="number"],
+form input[type="email"],
+form input[type="password"] {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 16px;
-    border: 1px solid #d7c9b6;
-    border-radius: 4px;
-    background-color: #fff8f0;
-}
-
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus,
-input[type="date"]:focus,
-select:focus {
-    border-color: #d35400;
-    outline: none;
-    background-color: #fff1e0;
-}
-
-button.button {
-    background-color: #d35400;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    cursor: pointer;
+    padding: 10px 12px;
+    margin-bottom: 15px;
+    border: 1px solid #cc7a00;
     border-radius: 5px;
     font-size: 16px;
+    background-color: #fff8f0;
+    color: #4b2e00;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+form input[type="text"]:focus,
+form input[type="number"]:focus,
+form input[type="email"]:focus,
+form input[type="password"]:focus {
+    outline: none;
+    border-color: #e09b1c; /* softer highlight */
+    background-color: #fff3d6;
+}
+
+/* Buttons */
+button {
+    background-color: #cc7a00;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
     transition: background-color 0.3s ease;
 }
 
-button.button:hover {
-    background-color: #b24100;
-}
-.success {
-    color: #2e7d32;
-    background-color: #e8f5e9;
-    border: 1px solid #c8e6c9;
-    padding: 10px;
-    border-radius: 4px;
-    text-align: center;
-    margin-bottom: 20px;
+button:hover {
+    background-color: #a56400;
 }
 
-.error {
-    color: #c62828;
-    background-color: #ffebee;
-    border: 1px solid #ef9a9a;
-    padding: 10px;
-    border-radius: 4px;
-    text-align: center;
-    margin-bottom: 20px;
+/* Links */
+a {
+    color: #a56400;
+    margin-left: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
 }
+
+a:hover {
+    color: #cc7a00;
+    text-decoration: underline;
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff8f0;
+    font-size: 15px;
+    border-radius: 8px;
+    overflow: hidden;
+    table-layout: fixed;
+    box-shadow: 0 0 10px rgba(204, 122, 0, 0.1);
+}
+
+table th {
+    background-color: #cc7a00;
+    padding: 12px 10px;
+    color: white;
+    text-align: left;
+    border-bottom: 2px solid #a56400;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+table td {
+    padding: 10px;
+    border-bottom: 1px solid #f0d9b5;
+    vertical-align: middle;
+    color: #4b2e00;
+}
+
+/* Zebra striping and hover */
+table tr:nth-child(even) {
+    background-color: #fff1d0;
+}
+
+table tr:hover {
+    background-color: #fff3d6;
+}
+
+/* Input fields inside table */
+form td input {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #cc7a00;
+    border-radius: 4px;
+    background-color: #fff8f0;
+    color: #4b2e00;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+form td input:focus {
+    outline: none;
+    border-color: #e09b1c;
+    background-color: #fff3d6;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-    .container {
-        padding: 15px 20px;
+    body {
+        padding: 10px;
     }
 
-    th, td {
+    #add-driver-container,
+    #all-drivers-container {
+        padding: 20px;
+    }
+
+    table, form, input, button {
         font-size: 14px;
     }
 
-    button.button {
-        width: 100%;
+    table th, table td {
+        padding: 8px;
     }
 }

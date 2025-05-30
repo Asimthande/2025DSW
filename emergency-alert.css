@@ -1,16 +1,17 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
+    background-color: #f5f5dc;
     margin: 0;
     padding: 0;
 }
+
 .container {
     max-width: 700px;
     margin: 40px auto;
-    background-color: #fff;
+    background-color: #fffaf0;
     padding: 30px;
     border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 15px rgba(255, 165, 0, 0.2);
 }
 
 h1 {
@@ -23,6 +24,7 @@ form label {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
+    color: #444;
 }
 
 form input,
@@ -31,10 +33,12 @@ form textarea {
     width: 100%;
     padding: 12px;
     margin-bottom: 20px;
-    border: 1px solid #ccc;
+    border: 1px solid #d4a373;
     border-radius: 6px;
     box-sizing: border-box;
     font-size: 16px;
+    background-color: #fffaf0;
+    color: #333;
 }
 
 button {
@@ -48,38 +52,39 @@ button {
 }
 
 #share-location-btn {
-    background-color: hsl(25, 80%, 60%);
+    background-color: orange;
     color: white;
 }
 
 #share-location-btn:hover {
-    background-color: hsl(25, 80%, 55%);
+    background-color: #e69500;
 }
 
 #submit-btn {
-    background-color: hsl(290, 70%, 55%);
+    background-color: #cc7000;
     color: white;
 }
 
 #submit-btn:hover {
-    background-color: hsl(290, 70%, 50%);
+    background-color: #a65600;
 }
 
 #response-message {
     margin-top: 20px;
     font-weight: bold;
     text-align: center;
+    color: #7a4e00;
 }
 
 #logout-btn {
     display: block;
     margin: 30px auto 0;
-    background-color: #dc3545;
+    background-color: #e67e22;
     color: white;
 }
 
 #logout-btn:hover {
-    background-color: #c82333;
+    background-color: #ca6b1e;
 }
 
 #map-container {
@@ -89,7 +94,7 @@ button {
 #map {
     height: 400px;
     width: 100%;
-    border: 1px solid #ccc;
+    border: 1px solid #d4a373;
     border-radius: 6px;
 }
 
@@ -97,5 +102,5 @@ button {
     text-align: center;
     font-size: 16px;
     margin-top: 10px;
-    color: #555;
+    color: #7a5c28;
 }

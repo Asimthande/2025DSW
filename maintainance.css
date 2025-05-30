@@ -1,8 +1,8 @@
 :root {
-  --primary: hsl(10, 90%, 50%);
-  --bg: hsl(30, 30%, 95%);
-  --text: #222;
-  --accent: hsl(290, 70%, 55%);
+  --primary: orange;
+  --bg: #f5f5dc;
+  --text: #333;
+  --accent: #cc7000;
 }
 
 body {
@@ -40,7 +40,7 @@ h1 {
 }
 
 .view-toggle button:hover {
-  background-color: hsl(10, 90%, 40%);
+  background-color: #e69500;
 }
 
 .view {
@@ -50,11 +50,11 @@ h1 {
 table {
   width: 100%;
   border-collapse: collapse;
-  background: white;
+  background: #fffaf0;
 }
 
 th, td {
-  border: 1px solid #ccc;
+  border: 1px solid #d4a373;
   padding: 10px;
   text-align: left;
 }
@@ -71,9 +71,9 @@ thead {
 }
 
 .card {
-  background: #fff;
+  background: #fffaf0;
   padding: 15px;
-  border: 1px solid #ddd;
+  border: 1px solid #d4a373;
   border-radius: 8px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.05);
+  box-shadow: 0 0 5px rgba(255, 165, 0, 0.1);
 }

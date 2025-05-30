@@ -136,7 +136,13 @@ img{
   border-color: #ff8000;
   outline: none;
 }
-
+#google-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  font-size: 0.95rem;
+    }
 .password-group {
   position: relative;
 }

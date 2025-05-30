@@ -1,10 +1,9 @@
-/* General Styles */
 :root {
-  --primary: hsl(10, 90%, 50%);
-  --secondary: hsl(290, 70%, 55%);
-  --bg: hsl(30, 30%, 95%);
-  --contrast: hsl(25, 80%, 60%);
-  --text: #222;
+  --primary: hsl(30, 100%, 45%);         /* Orange */
+  --secondary: hsl(34, 60%, 60%);        /* Lighter Orange / Warm Beige */
+  --bg: hsl(36, 70%, 90%);               /* Light Beige Background */
+  --contrast: hsl(30, 100%, 50%);        /* Stronger Orange for accents */
+  --text: #333;                          /* Darker text for better contrast */
 }
 
 body {
@@ -20,7 +19,6 @@ body {
   padding: 20px;
 }
 
-/* Header and Navigation */
 header {
   background-color: var(--primary);
   color: #fff;
@@ -54,7 +52,6 @@ nav ul li a:hover {
   background: rgba(255, 255, 255, 0.4);
 }
 
-/* Main Content */
 section {
   margin-top: 40px;
   background: #fff;
@@ -70,7 +67,7 @@ section {
 }
 
 .card {
-  background-color: #f9f9f9;
+  background-color: #fdf6ef; /* Very light beige */
   padding: 20px;
   border-radius: 6px;
   box-shadow: 0 0 5px rgba(0,0,0,0.05);
@@ -94,7 +91,6 @@ canvas {
   box-shadow: 0 0 5px rgba(0,0,0,0.05);
 }
 
-/* Form Styling */
 form {
   display: flex;
   flex-direction: column;
@@ -120,10 +116,9 @@ form button {
 }
 
 form button:hover {
-  background-color: hsl(10, 90%, 40%);
+  background-color: hsl(30, 100%, 35%);
 }
 
-/* Button Styling */
 button {
   padding: 10px 15px;
   border: none;
@@ -134,14 +129,13 @@ button {
 }
 
 button:hover {
-  background: hsl(290, 70%, 45%);
+  background: hsl(34, 60%, 50%);
 }
 
-/* Table Styling */
 table {
   width: 100%;
   border-collapse: collapse;
-  background: #fafafa;
+  background: #faf4ec; /* Soft beige */
   box-shadow: 0 0 5px rgba(0,0,0,0.05);
 }
 
@@ -157,45 +151,34 @@ table thead {
 }
 
 table tr:nth-child(even) {
-  background-color: #f2f2f2;
+  background-color: #f4ebdf;
 }
 
 .table-wrapper {
   margin-top: 20px;
   overflow-x: auto;
 }
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-th, td {
-    border: 1px solid #ccc;
-    padding: 10px;
-    text-align: left;
-}
 
 .editable {
-    background-color: #fffaf5;
-    border: 1px dashed hsl(10, 90%, 50%);
-    outline: none;
+  background-color: #fff8ee;
+  border: 1px dashed var(--primary);
+  outline: none;
 }
 
 .update-btn {
-    background-color: hsl(10, 90%, 50%);
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 6px;
-    cursor: pointer;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
 .update-btn:hover {
-    background-color: hsl(10, 90%, 40%);
+  background-color: hsl(30, 100%, 35%);
 }
 
 .state-select {
-    padding: 5px;
-    border-radius: 4px;
+  padding: 5px;
+  border-radius: 4px;
 }

@@ -118,7 +118,8 @@ body {
 }
 
 .input-group input,
-.input-group select {
+.input-group select,
+.input-group #buttonDiv {
   padding: 8px 10px;
   font-size: 0.9rem;
   border: 1px solid #ccc;

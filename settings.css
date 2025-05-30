@@ -1,6 +1,6 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: hsl(30, 30%, 95%);
+  background-color: #f5f5dc;
   margin: 0;
   padding: 0;
   color: #333;
@@ -10,9 +10,9 @@ body {
   max-width: 600px;
   margin: 40px auto;
   padding: 2rem;
-  background: white;
+  background: #fffaf0;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(255, 165, 0, 0.2);
 }
 
 h1 {
@@ -26,8 +26,8 @@ h1 {
 }
 
 h2 {
-  color: black;
-  border-bottom: 2px solid black;
+  color: #333;
+  border-bottom: 2px solid orange;
   padding-bottom: 5px;
   margin-bottom: 20px;
 }
@@ -36,6 +36,7 @@ form label {
   display: block;
   margin: 10px 0 5px;
   font-weight: bold;
+  color: #444;
 }
 
 input[type="text"],
@@ -43,8 +44,9 @@ input[type="email"],
 input[type="password"] {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #d4a373;
   border-radius: 5px;
+  background-color: #fffaf0;
 }
 
 input[type="checkbox"] {
@@ -64,5 +66,18 @@ input[type="checkbox"] {
 }
 
 .save-btn:hover {
-  background-color: hsl(10, 90%, 40%);
+  background-color: #cc7000;
+}
+
+.back-button a {
+  color: orange;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.back-button {
+  background-color: beige;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
 }
