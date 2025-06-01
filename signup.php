@@ -34,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($stmt->execute()) {
                 session_start();
+                $_SESSION['last_name']=$last_name;
                 $_SESSION['student_number'] = $student_number;
                 $_SESSION['email']=$email;
                 $_SESSION['first_name']=$first_name;
@@ -63,15 +64,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
   function handleCredentialResponse(response) {
-    let studentNumber = document.getElementById("studentid");
-    let password=document.getElementById("password");
-    if (password.value.length < 8) {
-      alert("Please Enter A Password");
-      password.focus();
-      return;
-    }
+    const studentNumber = document.getElementById("studentid");
+    
     if (studentNumber.value.length < 8) {
-      alert("Please Enter A Valid Student Number");
+      alert("Please enter a valid student number.");
       studentNumber.focus();
       return;
     }
@@ -80,14 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     xhr.open("POST", "google.php");
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
-xhr.onload = () => {
-    window.location.href = "verify.php";
-};
-
-
-const postData = "id_token=" + encodeURIComponent(response.credential) +
-                     "&student_number=" + encodeURIComponent(studentNumber.value)+
-                     "&password=" + encodeURIComponent(password.value);
+    const postData = "id_token=" + encodeURIComponent(response.credential) +
+                     "&student_number=" + encodeURIComponent(studentNumber.value);
 
     xhr.send(postData);
   }
@@ -97,24 +87,28 @@ const postData = "id_token=" + encodeURIComponent(response.credential) +
       client_id: "72387172929-9dmud5cuo2s1dimnch974rk96as6c583.apps.googleusercontent.com",
       callback: handleCredentialResponse
     });
+
     google.accounts.id.renderButton(
       document.getElementById("buttonDiv"),
-      { theme: "outline", size: "large" }
+      {
+        theme: "outline",
+        size: "large",
+        text: "signup_with",
+        width: "100%"
+      }
     );
   };
 </script>
 
-
 </head>
 <body>
   <div class="signup-container">
-    <div class="signup-left">
-      <img src="https://i.pinimg.com/474x/81/e9/27/81e9273c1fb5426abf62956af6ee6b38.jpg" alt="University of Johannesburg Logo" class="logo">
-      <h2>Welcome to UJ Bus Tracker</h2>
+    <div class="signup-left" style="color:black;">
+      <img src="images/Icon-2.jpeg" alt="Bus Illustration" class="bus-img">
+      <h2>Welcome to JsJ Bus Tracker</h2>
       <p>Track your campus bus in real-time. Sign up to get started!</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXjKYvyZjXDmVdD1nZVX7uhjqRR3LGDIMHOQ&s" alt="Bus Illustration" class="bus-img">
       <form method="get">
-        <p class="login-link"><a href="dashboard.php?role='guest'" name="guest" >Login as Guest</a></p>
+        <p class="login-link" ><a href="dashboard.php?role='guest'" name="guest" >Login as Guest</a></p>
         </form>
         <?php
         if(isset($_GET['guest'])){
@@ -162,9 +156,8 @@ const postData = "id_token=" + encodeURIComponent(response.credential) +
         <button type="submit" class="signup-btn" id="signup" disabled>Sign Up</button>
         <div id="forgot-password"><label><a href='forgot-password.php'>Forgot Password?</a></label></div>
         <div class="divider"><span>or</span></div>
-        <div class="social-buttons">
-            <div id="buttonDiv"></div>
-          <button type="button" class="facebook-btn" id="facebookAuth" ><i class="fab fa-facebook-f"></i> Sign up with Facebook</button>
+        <div class="input-group" id="google-container">
+            <div id="buttonDiv" ></div>
         </div>
         <p class="login-link">Already have an account? <a href="signin.php">Log in</a></p>
       </form>

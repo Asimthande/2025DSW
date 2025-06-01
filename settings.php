@@ -97,29 +97,102 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>User Settings</title>
         <link rel="icon" type="image/jpeg" href="images/Stabus.jpeg">
-<style>
-    body { font-family: Arial, sans-serif; background: #f7f7f7; padding: 30px; }
-    .container { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 0 15px rgba(0,0,0,0.1);}
-    h1 { text-align: center; margin-bottom: 20px; }
-    label { display: block; margin-top: 15px; font-weight: bold; }
-    input[type="text"], input[type="email"], input[type="password"] {
-        width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc;
-    }
-    .btn {
-        margin-top: 20px; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem;
-    }
-    .btn-save { background-color: orange; color: white; }
-    .btn-delete { background-color: #dc3545; color: white; }
-    .btn-save:hover { background-color: #218838; }
-    .btn-delete:hover { background-color: #c82333; }
-    .message { margin-top: 15px; padding: 10px; border-radius: 4px; }
-    .success { background-color: #d4edda; color: #155724; }
-    .error { background-color: #f8d7da; color: #721c24; }
-    .small-note { font-size: 0.85rem; color: #555; margin-top: 5px; }
+<style>body {
+    font-family: Arial, sans-serif;
+    background: #f5f5dc;
+    padding: 30px;
+    color: #333;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: #fffaf0;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(255, 165, 0, 0.2);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: orange;
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    color: #444;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 4px;
+    border: 1px solid #d4a373;
+    background-color: #fffaf0;
+}
+
+.btn {
+    margin-top: 20px;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.btn-save {
+    background-color: orange;
+    color: white;
+}
+
+.btn-delete {
+    background-color: #cc7000;
+    color: white;
+}
+
+.btn-save:hover {
+    background-color: #e69500;
+}
+
+.btn-delete:hover {
+    background-color: #a65600;
+}
+
+.message {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.success {
+    background-color: #ffe5b4;
+    color: #7a4e00;
+}
+
+.error {
+    background-color: #fddbb0;
+    color: #803300;
+}
+
+.small-note {
+    font-size: 0.85rem;
+    color: #7a5c28;
+    margin-top: 5px;
+}
 </style>
 </head>
 <body>
 <div class="container">
+<div class="back-button" style="background-color: beige; padding: 10px; border-radius: 5px;">
+    <a href="dashboard.php" style="color: orange; text-decoration: none; font-weight: bold;">&larr; Back to Dashboard</a>
+</div>
+
     <h1>User Settings</h1>
 
     <?php if ($message): ?>

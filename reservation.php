@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 require_once __DIR__.'/vendor/autoload.php';
 require_once __DIR__.'/config.php';
 
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['student_number'])) {
     header("Location: dashboard.php");
     exit();
 }

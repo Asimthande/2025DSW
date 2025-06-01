@@ -9,11 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$bus_id || !$route_id || !$time_input) {
         exit("Missing required fields.");
     }
-
     $current_date = date('Y-m-d');
-
     $time_input = preg_match('/^\d{2}:\d{2}$/', $time_input) ? $time_input . ':00' : $time_input;
-
     $departure_datetime = $current_date . ' ' . $time_input;
 
     $conn = OpenCon();

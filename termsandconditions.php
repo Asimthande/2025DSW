@@ -26,7 +26,7 @@
         </ul>
 
         <h2>3. Privacy Policy</h2>
-        <p>Your privacy is important to us. Please review our <a href="/privacy-policy">Privacy Policy</a> to understand how we collect and use your data.</p>
+        <p>Your privacy is important to us. Please review our <a href="/privacy-policy.html">Privacy Policy</a> to understand how we collect and use your data.</p>
 
         <h2>4. Limitations of Liability</h2>
         <p>We are not liable for any damages, losses, or inconvenience caused by using our services, except as specified by law.</p>

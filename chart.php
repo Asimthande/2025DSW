@@ -138,6 +138,9 @@ if ($chartType === 'booking_hours') {
 <body>
 
 <h1>UJ Stabus: Booking Analytics</h1>
+<div class="back-button" style="background-color: beige; padding: 10px; border-radius: 5px;">
+    <a href="dashboard.php" style="color: orange; text-decoration: none; font-weight: bold;">&larr; Back to Dashboard</a>
+</div>
 
 <form method="GET" action="chart.php">
     <label>Chart Type:

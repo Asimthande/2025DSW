@@ -133,6 +133,10 @@ if (isset($_GET['city']) && !empty($_GET['city'])) {
 </head>
 <body>
   <div class="container">
+  <div class="back-button" style="background-color: beige; padding: 10px; border-radius: 5px;">
+    <a href="dashboard.php" style="color: orange; text-decoration: none; font-weight: bold;">&larr; Back to Dashboard</a>
+</div>
+
     <h1>Weather Display</h1>
     <form method="GET" action="">
       <label for="city">Select a City:</label>

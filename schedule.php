@@ -45,7 +45,13 @@ if (!$result) {
         <link rel="icon" type="image/jpeg" href="images/Stabus.jpeg">
 </head>
 <body>
+
+<div class="back-button" style="background-color: beige; padding: 10px; border-radius: 5px;">
+    <a href="dashboard.php" style="color: orange; text-decoration: none; font-weight: bold;">&larr; Back to Dashboard</a>
+</div>
+
 <div class="container">
+
     <h1>Bus Schedules for <?= htmlspecialchars($selectedDate) ?></h1>
 
     <form method="GET">

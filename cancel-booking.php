@@ -50,13 +50,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
         echo "<p class='message'>Booking not found or doesn't belong to you.</p>";
     }
 }
+$select_query = "SELECT * FROM tblBookings WHERE student_number=? ORDER BY booking_time DESC";
 
-
-$select_query = "SELECT * FROM tblBookings WHERE student_number=?";
 $stmt = $conn->prepare($select_query);
 $stmt->bind_param("s", $student_number);
 $stmt->execute();
 $result = $stmt->get_result();
+
+$today = date('Y-m-d');
+$tomorrow = date('Y-m-d', strtotime('+1 day'));
 
 if ($result->num_rows > 0) {
     echo "<table>
@@ -68,23 +70,36 @@ if ($result->num_rows > 0) {
             <th>Action</th>
         </tr>";
     while ($row = $result->fetch_assoc()) {
+        $bookingDate = date('Y-m-d', strtotime($row['booking_time']));
+
         echo "<tr>
             <td>" . htmlspecialchars($row['booking_id']) . "</td>
             <td>" . htmlspecialchars($row['bus_id']) . "</td>
             <td>" . htmlspecialchars($row['booking_time']) . "</td>
             <td>" . htmlspecialchars($row['reserved_seat']) . "</td>
-            <td>
-                <form method='POST' onsubmit=\"return confirm('Are you sure you want to cancel this booking?');\">
+            <td>";
+
+        if ($bookingDate > $tomorrow) {
+            echo "<form method='POST' onsubmit=\"return confirm('Are you sure you want to cancel this booking?');\">
                     <input type='hidden' name='delete_id' value='" . $row['booking_id'] . "'>
                     <input type='submit' value='Cancel Booking'>
-                </form>
-            </td>
+                  </form>";
+        } else {
+            echo "<form method='POST'>
+        <input type='hidden' name='delete_id' value='" . $row['booking_id'] . "'>
+        <input type='submit' value='Cancel Booking' disabled style='background-color:#ccc; color:#666; border:1px solid #999; cursor:not-allowed; opacity:0.6;'>
+      </form>";
+
+        }
+
+        echo "</td>
         </tr>";
     }
     echo "</table>";
 } else {
     echo "<p class='message'>No bookings found.</p>";
 }
+
 ?>
 
 </body>

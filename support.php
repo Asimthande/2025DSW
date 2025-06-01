@@ -1,54 +1,32 @@
 <?php
-// Include the database connection
 include 'partial/connect.php';
 
-// Check if the connection is established
-if (!$conn) {
-    die('Error: Failed to connect to the database. Please check the connection settings.');
-}
+$successMessage = '';
+$errorMessage = '';
+$faqResult = null;
 
-// Form submission logic
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Sanitize user input to prevent SQL injection and XSS
-    $name = htmlspecialchars(trim($_POST['name']));
-    $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
-    $question = htmlspecialchars(trim($_POST['message']));
+    $name = $_POST['name'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $question = $_POST['message'] ?? '';
 
-    // Validate email format after sanitization
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        echo 'Invalid email format.';
-        exit;
-    }
-
-    // Check if the fields are not empty
-    if (empty($name) || empty($email) || empty($question)) {
-        echo 'Please fill all fields.';
-        exit;
-    }
-
-    // Prepare the SQL query using MySQLi
-    $sql = "INSERT INTO questions (Name, Email, Question) VALUES (?, ?, ?)";
-
-    // Use prepared statements with MySQLi to prevent SQL injection
-    if ($stmt = $conn->prepare($sql)) {  // Use $conn here instead of $mysqli
-        // Bind the parameters
+    $stmt = $conn->prepare("INSERT INTO questions (Name, Email, Question) VALUES (?, ?, ?)");
+    if ($stmt) {
         $stmt->bind_param("sss", $name, $email, $question);
-
-        // Execute the query
         if ($stmt->execute()) {
-            echo "<h1 style=\"color:green;\">Your question has been submitted successfully!</h1>";
+            $successMessage = 'Your question has been submitted successfully!';
         } else {
-            echo "<h1 style=\"color:red;\">Could Not Submit Question!</h1>";
+            $errorMessage = 'Could not submit your question.';
         }
-
-        // Close the statement
         $stmt->close();
     } else {
-        echo 'Error preparing the query: ' . $conn->error;  
+        $errorMessage = 'Database error.';
     }
 }
 
-// Close the MySQLi connection after use
+$faqQuery = "SELECT * FROM questions ORDER BY ID DESC";
+$faqResult = $conn->query($faqQuery);
+
 $conn->close();
 ?>
 
@@ -56,56 +34,82 @@ $conn->close();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAQs & Support</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="support.css">
+    <link rel="icon" type="image/jpeg" href="images/Stabus.jpeg">
 </head>
 <body>
+    <img src="images/Chatbot Chat Message.jpg" alt="Bot Pic" class="corner-image" style="border:3px solid orange;border-radius:30px;" onclick="window.location.href='AI.php'">
 
-<div class="container">
-    <h1>FAQs & Support</h1>
-
-    <!-- FAQs Section -->
-    <section id="faqs">
-        <h2>Frequently Asked Questions (FAQs)</h2>
-        <div class="faq">
-            <button class="faq-question">What is the service we provide?</button>
-            <div class="faq-answer">
-                <p>We provide bus tracking services to monitor bus status and schedules in real-time.</p>
-            </div>
+    <div class="container">
+        <div class="back-button" style="background-color: beige; padding: 10px; border-radius: 5px;">
+            <a href="dashboard.php" style="color: orange; text-decoration: none; font-weight: bold;">&larr; Back to Dashboard</a>
         </div>
-        <div class="faq">
-            <button class="faq-question">How do I track my bus?</button>
-            <div class="faq-answer">
-                <p>Log in to your account and go to the "Track Bus" section to view the bus location on the map.</p>
+
+        <h1>FAQs & Support</h1>
+
+        <?php if (!empty($successMessage)): ?>
+            <p style="color: green; font-weight: bold;"><?= htmlspecialchars($successMessage) ?></p>
+        <?php elseif (!empty($errorMessage)): ?>
+            <p style="color: red; font-weight: bold;"><?= htmlspecialchars($errorMessage) ?></p>
+        <?php endif; ?>
+
+        <section id="faqs">
+            <h2>Frequently Asked Questions (FAQs)</h2>
+            <div class="faq">
+                <button class="faq-question">What is the service we provide?</button>
+                <div class="faq-answer">
+                    <p>We provide bus tracking services to monitor bus status and schedules in real-time.</p>
+                </div>
             </div>
-        </div>
-        <div class="faq">
-            <button class="faq-question">What do I do if my bus is delayed?</button>
-            <div class="faq-answer">
-                <p>If your bus is delayed, we will notify you via SMS or email with updated timings.</p>
+            <div class="faq">
+                <button class="faq-question">How do I track my bus?</button>
+                <div class="faq-answer">
+                    <p>Log in to your account and go to the "Track Bus" section to view the bus location on the map.</p>
+                </div>
             </div>
-        </div>
-    </section>
+            <div class="faq">
+                <button class="faq-question">What do I do if my bus is delayed?</button>
+                <div class="faq-answer">
+                    <p>If your bus is delayed, we will notify you via SMS or email with updated timings.</p>
+                </div>
+            </div>
+        </section>
 
-    <!-- Support Section -->
-    <section id="support">
-        <h2>Contact Support</h2>
-        <!-- Form submission to the current page -->
-        <form id="support-form" method="POST">
-            <label for="name">Your Name:</label>
-            <input type="text" id="name" name="name" required>
+        <section id="support">
+            <h2>Contact Support</h2>
+            <form id="support-form" method="POST">
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" name="name" required>
 
-            <label for="email">Your Email:</label>
-            <input type="email" id="email" name="email" required>
+                <label for="email">Your Email:</label>
+                <input type="email" id="email" name="email" required>
 
-            <label for="message">Your Message:</label>
-            <textarea id="message" name="message" rows="4" required></textarea>
+                <label for="message">Your Message:</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
 
-            <button type="submit" class="submit-btn">Send Message</button>
-        </form>
-    </section>
-</div>
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </section>
+    </div>
+
+    <div class="faq-container">
+        <h2>Submitted Questions</h2>
+        <?php if ($faqResult && $faqResult->num_rows > 0): ?>
+            <?php while ($row = $faqResult->fetch_assoc()): ?>
+                <div class="faq">
+                    <div class="faq-question">
+                        <strong><?= htmlspecialchars($row['Name']) ?></strong> 
+                        (<em><?= htmlspecialchars($row['Email']) ?></em>) asked:
+                        <p><?= htmlspecialchars($row['Question']) ?></p>
+                    </div>
+                </div>
+            <?php endwhile; ?>
+        <?php else: ?>
+            <p>No questions found.</p>
+        <?php endif; ?>
+    </div>
 
 </body>
 </html>

@@ -48,7 +48,7 @@ if (!isset($_SESSION['verification_code'])) {
 
     <p style="font-size: 16px; color: #333;">Please enter this code to verify your account.</p>
 
-    <p style="font-size: 16px; color: #333;">Regards,<br>Your Team</p>
+    <p style="font-size: 16px; color: #333;">Regards,<br>JavaScript Junkies</p>
 </div>';
 
 
@@ -58,19 +58,17 @@ if (!isset($_SESSION['verification_code'])) {
         exit;
     }
 }
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userCode = $_POST['verification_code'];
-
     if ($userCode === $_SESSION['verification_code']) {
         $studentNumber = $_SESSION['student_number'];
-
         $sql = "UPDATE `Students` SET `state` = 1 WHERE `StudentNumber` = ?";
         var_dump($_SESSION);
         if ($stmt = $conn->prepare($sql)) {
             $stmt->bind_param("i", $studentNumber);
 
             if ($stmt->execute()) {
+                $_SESSION['role']='student';
                 header("Location: dashboard.php");
                 exit;
             } else {

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Access Restricted</title>
+  <style>
+    body {
+      background-color: #f5f5dc; /* Beige background */
+      color: #333;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      padding-top: 100px;
+      margin: 0;
+      overflow: hidden;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+      color: #d35400; /* Deep orange */
+    }
+
+    p {
+      font-size: 20px;
+      margin-bottom: 20px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .notice {
+      background-color: #fff3e0; /* Light orange box */
+      border: 2px solid #ffa726; /* Orange border */
+      border-radius: 10px;
+      padding: 30px 20px;
+      display: inline-block;
+      animation: float 3s ease-in-out infinite;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .subtitle {
+      font-style: italic;
+      color: #e65100;
+      margin-bottom: 15px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    footer {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      font-size: 14px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="notice">
+    <h1>Access Restricted</h1>
+    <div class="subtitle">UJ Stabus says that for now...</div>
+    <p>This site is only accessible between <strong>6:00 AM and 6:00 PM</strong> (server time).</p>
+    <p>Please return during those hours to continue using the service.</p>
+  </div>
+
+  <footer>&copy; 2025 Your Website Name</footer>
+
+</body>
+</html>

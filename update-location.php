@@ -10,7 +10,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $storeHistory = ($_POST['storeHistory'] === 'true');
     $busID = $_SESSION['bus_id'];
     $updateTime = date('Y-m-d H:i:s');
-
     $check = $conn->prepare("SELECT ID FROM live WHERE BusID = ?");
     $check->bind_param("s", $busID);
     $check->execute();
@@ -29,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $check->close();
-
     if ($storeHistory) {
         $stmt2 = $conn->prepare("INSERT INTO location_history (Longitude, Latitude, UpdateTime, BusID) VALUES (?, ?, ?, ?)");
         $stmt2->bind_param("ddss", $longitude, $latitude, $updateTime, $busID);

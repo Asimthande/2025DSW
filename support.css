@@ -14,6 +14,15 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(255, 165, 0, 0.1);
 }
+.corner-image {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 9999; 
+  width: 100px;
+  height: auto;
+  margin: 10px; 
+}
 
 h1, h2 {
     text-align: center;
