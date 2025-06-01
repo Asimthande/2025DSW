@@ -7,6 +7,19 @@
 html {
   scroll-behavior: smooth;
 }
+.corner-image:hover{
+    cursor: pointer;
+    border:3px dashed gray;
+}
+.corner-image {
+  position: fixed;
+  bottom: 100;
+  right: 0;
+  z-index: 9999; 
+  width: 100px;
+  height: auto;
+  margin: 10px; 
+}
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
