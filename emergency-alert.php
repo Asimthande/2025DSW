@@ -49,6 +49,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 <div class="container">
+<div class="back-button" style="background-color: beige; padding: 10px; border-radius: 5px;">
+    <a href="dashboard.php" style="color: orange; text-decoration: none; font-weight: bold;">&larr; Back to Dashboard</a>
+</div>
+
     <h1>Emergency Reporting System</h1>
     <form id="emergency-form" method="POST">
         <label for="emergency-type">Select Emergency Type:</label>

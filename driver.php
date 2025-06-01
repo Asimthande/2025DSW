@@ -10,6 +10,13 @@ if (!isset($_SESSION['bus_id'])) {
 <head>
     <title>Driver Dashboard</title>
     <link rel="stylesheet" href="driver.css">
+    <style>
+    body{
+        display:flex;
+        flex-direction:column;
+        text-align:center;
+    }
+    </style>
 </head>
 <body>
     <h1>Driver Dashboard</h1>
@@ -19,75 +26,87 @@ if (!isset($_SESSION['bus_id'])) {
     <button id="stopBtn">Stop Sharing</button>
     <button id="logoutBtn">Logout</button>
     <p id="status">Click "Start Sharing" to send your location.</p>
+    <div id="schedule-container"></div>
+<div id="statistics">
+            <button onclick="window.location.href='driver-chart.php'"><i class="fas fa-home"></i> Statistics</button>
+            <button onclick="window.location.href='driver-setting-schedule.php'"><i class="fas fa-home"></i> Schedule</button>
+</div><script>
+const startBtn = document.getElementById("startBtn");
+const stopBtn = document.getElementById("stopBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+const statusEl = document.getElementById("status");
 
-    <script>
-    const startBtn = document.getElementById("startBtn");
-    const stopBtn = document.getElementById("stopBtn");
-    const logoutBtn = document.getElementById("logoutBtn");
-    const statusEl = document.getElementById("status");
+let intervalId = null;
 
-    let intervalId = null;
+startBtn.onclick = function () {
+    if (!navigator.geolocation) {
+        statusEl.textContent = "Geolocation is not supported by your browser.";
+        console.error("Geolocation not supported.");
+        return;
+    }
 
-    startBtn.onclick = function () {
-        if (!navigator.geolocation) {
-            statusEl.textContent = "Geolocation is not supported by your browser.";
-            return;
-        }
+    intervalId = setInterval(() => {
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
 
-        intervalId = setInterval(() => {
-            navigator.geolocation.getCurrentPosition(
-                position => {
-                    const lat = position.coords.latitude;
-                    const lng = position.coords.longitude;
+                // Format: YYYY-MM-DD HH:MM:SS
+                const now = new Date();
+                const datetime = now.toISOString().slice(0, 19).replace("T", " ");
+                const body = `latitude=${lat}&longitude=${lng}&datetime=${encodeURIComponent(datetime)}`;
 
-                    // Format: YYYY-MM-DD HH:MM:SS
-                    const now = new Date();
-                    const year = now.getFullYear();
-                    const month = String(now.getMonth() + 1).padStart(2, '0');
-                    const day = String(now.getDate()).padStart(2, '0');
-                    const hours = String(now.getHours()).padStart(2, '0');
-                    const minutes = String(now.getMinutes()).padStart(2, '0');
-                    const seconds = String(now.getSeconds()).padStart(2, '0');
-                    const datetime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+                console.log(`Sending: ${body}`);
 
-                    const body = `latitude=${lat}&longitude=${lng}&datetime=${encodeURIComponent(datetime)}`;
+                fetch('driver-location.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: body
+                })
+                .then(response => response.text().then(text => {
+                    console.log("Response Status:", response.status);
+                    console.log("Response Text:", text);
 
-                    fetch('driver-location.php', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: body
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            statusEl.textContent = `Location shared at ${datetime}`;
-                        } else {
-                            statusEl.textContent = "Failed to share location.";
-                        }
-                    })
-                    .catch(err => {
-                        statusEl.textContent = "Error sending location: " + err.message;
-                    });
-                },
-                error => {
-                    statusEl.textContent = "Geolocation error: " + error.message;
-                }
-            );
-        }, 4000); // Every 4 seconds
+                    if (response.ok) {
+                        statusEl.textContent = `Location shared at ${datetime}`;
+                    } else {
+                        statusEl.textContent = `Failed to share location: ${response.status}`;
+                    }
+                }))
+                .catch(err => {
+                    statusEl.textContent = "Error sending location: " + err.message;
+                    console.error("Fetch error:", err);
+                });
+            },
+            error => {
+                const errors = {
+                    1: "Permission denied",
+                    2: "Position unavailable",
+                    3: "Timeout"
+                };
+                const errorMessage = errors[error.code] || error.message;
+                statusEl.textContent = "Geolocation error: " + errorMessage;
+                console.error("Geolocation error:", error);
+            }
+        );
+    }, 4000); // Every 4 seconds
 
-        statusEl.textContent = "Started sharing location...";
-    };
+    statusEl.textContent = "Started sharing location...";
+};
 
-    stopBtn.onclick = function () {
-        if (intervalId !== null) {
-            clearInterval(intervalId);
-            intervalId = null;
-            statusEl.textContent = "Stopped sharing location.";
-        }
-    };
+stopBtn.onclick = function () {
+    if (intervalId !== null) {
+        clearInterval(intervalId);
+        intervalId = null;
+        statusEl.textContent = "Stopped sharing location.";
+        console.log("Location sharing stopped.");
+    }
+};
 
-    logoutBtn.onclick = function () {
-        window.location.href = 'logout.php';
-    };
-    </script>
+logoutBtn.onclick = function () {
+    window.location.href = 'logout.php';
+};
+</script>
+
 </body>
 </html>

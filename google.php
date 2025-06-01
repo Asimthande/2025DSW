@@ -16,7 +16,6 @@ function decodeIdToken($id_token) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_token = $_POST['id_token'] ?? '';
     $student_number = $_POST['student_number'] ?? '';
-    $plain_password = $_POST['password'] ?? ''; 
 
     $user_data = decodeIdToken($id_token);
 
@@ -25,8 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $last_name = $user_data['family_name'] ?? '';
         $email = $user_data['email'];
 
-        $hashed_password = password_hash($plain_password, PASSWORD_DEFAULT); 
-        
         $check_sql = "SELECT studentNumber FROM Students WHERE studentNumber = ?";
         $stmt = $conn->prepare($check_sql);
         $stmt->bind_param("s", $student_number);
@@ -36,19 +33,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($result->num_rows > 0) {
             echo "This student number is already registered.";
         } else {
-            $insert_sql = "INSERT INTO Students (studentNumber, firstName, lastName, email, password, state) 
-                           VALUES (?, ?, ?, ?, ?, 0)";
+            $insert_sql = "INSERT INTO Students (studentNumber, firstName, lastName, email, state) 
+                           VALUES (?, ?, ?, ?, 0)";
             $stmt = $conn->prepare($insert_sql);
-            $stmt->bind_param("sssss", $student_number, $first_name, $last_name, $email, $hashed_password);
+            $stmt->bind_param("ssss", $student_number, $first_name, $last_name, $email);
 
             if ($stmt->execute()) {
                 session_start();
                 $_SESSION['student_number'] = $student_number;
                 $_SESSION['email'] = $email;
                 $_SESSION['first_name'] = $first_name;
-                $_SESSION['last_name']=$last_name;
-                $_SESSION['role']='student';
-                header("Location: verify.php");
+                $_SESSION['last_name'] = $last_name;
+                $_SESSION['role'] = 'student';
+
+                echo "success";
                 exit();
             } else {
                 echo "Database Error: " . $conn->error;

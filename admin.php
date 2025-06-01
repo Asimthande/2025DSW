@@ -11,7 +11,8 @@ require_once "partial/connect.php";
 
 $first_name = $_SESSION['first_name'];
 $last_name = $_SESSION['last_name'];
-$email = $_SESSION['email'];$tables = [
+$email = $_SESSION['email'];
+$tables = [
     "Admins",
     "Emergency",
     "Maintain",
@@ -21,13 +22,14 @@ $email = $_SESSION['email'];$tables = [
     "questions",
     "tblBookings",
     "tblBusCapacity",
+    "tblBuses",
     "tblBusRoutes",
     "tblBusSchedules",
-    "tblBuses",
     "tblDrivers",
     "tblNotifications",
     "tblQueuePositions"
 ];
+
 
 
 $students = mysqli_query($conn, "SELECT COUNT(*) AS total FROM Students");
@@ -78,6 +80,7 @@ $notifications_total = mysqli_fetch_assoc($notifications)['total'];
                     <li><a href="admin-management.php">Manage Admins</a></li>
                     <li><a href="manage_drivers.php">Manage Drivers</a></li>
                     <li><a href="view_databases.php">View Databases</a></li>
+                    <li><a href-"answer_questions.php">Respond To Questions<><li>
                     <li><a href="#add-maintenance">Add Maintainance</a></li>                    
                     <li><a href="#update-maintenance">Update Maintainance</a></li>
 
