@@ -1,6 +1,6 @@
 function markAsRead(studentNumber) {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', `markAsRead.php?student_number=${studentNumber}`, true);
+    xhr.open('POST', `markAsRead.php?student_number=${studentNumber}`, true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
             const response = xhr.responseText.trim();

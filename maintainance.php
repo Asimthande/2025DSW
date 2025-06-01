@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: signin.php");
+if (!isset($_SESSION['student_number'])) {
+    header("Location: dashboard.php");
     exit();
 }
 
@@ -31,6 +31,10 @@ if ($result) {
 <body>
 
 <div class="container">
+<div class="back-button" style="background-color: beige; padding: 10px; border-radius: 5px;">
+    <a href="dashboard.php" style="color: orange; text-decoration: none; font-weight: bold;">&larr; Back to Dashboard</a>
+</div>
+
     <h1>Buses Under Maintenance</h1>
 
     <div class="view-toggle">

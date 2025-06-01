@@ -1,23 +1,25 @@
 <?php
 session_start();
 
-if (!isset($_GET['student_number'])) {
-    die("Invalid student number");
+if (!isset($_SESSION['student_number'])) {
+    header("Location: dashboard.php");
+    exit();
 }
 
-$studentNumber = $_GET['student_number'];
+if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($_POST['notification_id'])) {
+    header("Location: notifications.php");
+    exit();
+}
+
+$notification_id = intval($_POST['notification_id']);
 
 include('partial/connect.php');
-$sql = "UPDATE tblNotifications SET status = 1 WHERE student_number = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param('s', $studentNumber);
 
-if ($stmt->execute()) {
-    echo "Notification marked as read.";
-} else {
-    echo "Error marking notification as read.";
-}
-
+$stmt = $conn->prepare("UPDATE tblNotifications SET status = 'read' WHERE id = ?");
+$stmt->bind_param("i", $notification_id);
+$stmt->execute();
 $stmt->close();
 $conn->close();
-?>
+
+header("Location: notifications.php");
+exit();
