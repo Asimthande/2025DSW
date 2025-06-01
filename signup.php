@@ -78,8 +78,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     const postData = "id_token=" + encodeURIComponent(response.credential) +
                      "&student_number=" + encodeURIComponent(studentNumber.value);
+    xhr.onload = function () {
+  if (xhr.status === 200) {
+    if (xhr.responseText.trim() === "success") {
+      window.location.href = "verify.php"; 
+    } else {
+      alert(xhr.responseText); 
+    }
+  } else {
+    alert("An error occurred: " + xhr.statusText);
+  }
+};
 
     xhr.send(postData);
+    console.log(xhr);
   }
 
   window.onload = function () {
@@ -136,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <div class="input-group">
           <label for="studentid">Student Number</label>
-          <input type="text" id="studentid" name="student_number" value="<?php echo htmlspecialchars($_POST['student_number'] ?? '', ENT_QUOTES); ?>" required>
+          <input type="text" id="studentid" name="student_number" value="<?php echo htmlspecialchars($_POST['student_number'] ?? '', ENT_QUOTES); ?>" maxlength="9" minlength="9" required>
         </div>
         <div class="input-group">
           <label for="email">Email</label>

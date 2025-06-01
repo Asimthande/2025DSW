@@ -6,11 +6,22 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 }
 
 require_once "partial/connect.php";
-
 $tables = [
-    'tblQueuePositions', 'tblNotificationsSettings', 'tblNotifications', 'tblDrivers',
-    'tblBusSchedules', 'tblBusRoutes', 'tblBuses', 'tblBusCapacity', 'tblBookings',
-    'Students', 'location_history', 'live', 'Emergency', 'Admins'
+    "Admins",
+    "Emergency",
+    "Maintain",
+    "Students",
+    "live",
+    "location_history",
+    "questions",
+    "tblBookings",
+    "tblBusCapacity",
+    "tblBuses",
+    "tblBusRoutes",
+    "tblBusSchedules",
+    "tblDrivers",
+    "tblNotifications",
+    "tblQueuePositions"
 ];
 
 ?>

@@ -1,10 +1,15 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 include 'partial/connect.php';
 
 $successMessage = '';
 $errorMessage = '';
 $faqResult = null;
+$answers = [];
 
+// Submit new question
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $_POST['name'] ?? '';
     $email = $_POST['email'] ?? '';
@@ -24,9 +29,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// Get all questions
 $faqQuery = "SELECT * FROM questions ORDER BY ID DESC";
 $faqResult = $conn->query($faqQuery);
 
+// Get all answers, map by QuestionID
+$answerQuery = "SELECT * FROM Answers";
+$answerResult = $conn->query($answerQuery);
+if ($answerResult && $answerResult->num_rows > 0) {
+    while ($row = $answerResult->fetch_assoc()) {
+        $answers[$row['QuestionID']] = $row;
+    }
+}
 $conn->close();
 ?>
 
@@ -36,15 +50,88 @@ $conn->close();
     <meta charset="UTF-8">
     <title>FAQs & Support</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="support.css">
     <link rel="icon" type="image/jpeg" href="images/Stabus.jpeg">
+    <link rel="stylesheet" href="support.css">
+    <style>
+        body {
+            background-color: #f5f5dc;
+            font-family: Arial, sans-serif;
+            color: #333;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #d35400;
+        }
+        .faq, .faq-question, .faq-answer {
+            margin-bottom: 15px;
+        }.faq-question {
+    background-color: #fff8dc;
+    border: 2px solid #ffa500;
+    padding: 15px;
+    cursor: pointer;
+    border-radius: 8px;
+    color: #000; /* <-- Makes question text black */
+}
+
+.faq-question p {
+    color: #000; /* <-- Ensures paragraph inside is black */
+}
+
+        .faq-answer {
+            display: none;
+            background-color: #fff3e0;
+            border-left: 4px solid #ffa500;
+            padding: 10px 15px;
+            border-radius: 0 0 8px 8px;
+        }
+        .container {
+            margin-bottom: 40px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .submit-btn {
+            background-color: #ffa500;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #e67e22;
+        }
+        .back-button a {
+            color: orange;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .corner-image {
+            width: 70px;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <img src="images/Chatbot Chat Message.jpg" alt="Bot Pic" class="corner-image" style="border:3px solid orange;border-radius:30px;" onclick="window.location.href='AI.php'">
 
     <div class="container">
         <div class="back-button" style="background-color: beige; padding: 10px; border-radius: 5px;">
-            <a href="dashboard.php" style="color: orange; text-decoration: none; font-weight: bold;">&larr; Back to Dashboard</a>
+            <a href="dashboard.php">&larr; Back to Dashboard</a>
         </div>
 
         <h1>FAQs & Support</h1>
@@ -56,25 +143,29 @@ $conn->close();
         <?php endif; ?>
 
         <section id="faqs">
-            <h2>Frequently Asked Questions (FAQs)</h2>
-            <div class="faq">
-                <button class="faq-question">What is the service we provide?</button>
-                <div class="faq-answer">
-                    <p>We provide bus tracking services to monitor bus status and schedules in real-time.</p>
-                </div>
-            </div>
-            <div class="faq">
-                <button class="faq-question">How do I track my bus?</button>
-                <div class="faq-answer">
-                    <p>Log in to your account and go to the "Track Bus" section to view the bus location on the map.</p>
-                </div>
-            </div>
-            <div class="faq">
-                <button class="faq-question">What do I do if my bus is delayed?</button>
-                <div class="faq-answer">
-                    <p>If your bus is delayed, we will notify you via SMS or email with updated timings.</p>
-                </div>
-            </div>
+            <h2>Frequently Asked Questions</h2>
+
+            <?php if ($faqResult && $faqResult->num_rows > 0): ?>
+                <?php while ($row = $faqResult->fetch_assoc()): ?>
+                    <div class="faq">
+                        <div class="faq-question" onclick="toggleAnswer(this)">
+                            <strong><?= htmlspecialchars($row['Name']) ?></strong> asked:
+                            <p><?= htmlspecialchars($row['Question']) ?></p>
+                        </div>
+                        <div class="faq-answer">
+                            <?php if (isset($answers[$row['ID']])): ?>
+                                <p><strong>Answer by <?= htmlspecialchars($answers[$row['ID']]['AdminName']) ?>:</strong><br>
+                                <?= nl2br(htmlspecialchars($answers[$row['ID']]['Answer'])) ?></p>
+                                <small>Answered on <?= $answers[$row['ID']]['AnsweredAt'] ?></small>
+                            <?php else: ?>
+                                <p><em>This question has not been answered yet.</em></p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <p>No questions found.</p>
+            <?php endif; ?>
         </section>
 
         <section id="support">
@@ -94,22 +185,11 @@ $conn->close();
         </section>
     </div>
 
-    <div class="faq-container">
-        <h2>Submitted Questions</h2>
-        <?php if ($faqResult && $faqResult->num_rows > 0): ?>
-            <?php while ($row = $faqResult->fetch_assoc()): ?>
-                <div class="faq">
-                    <div class="faq-question">
-                        <strong><?= htmlspecialchars($row['Name']) ?></strong> 
-                        (<em><?= htmlspecialchars($row['Email']) ?></em>) asked:
-                        <p><?= htmlspecialchars($row['Question']) ?></p>
-                    </div>
-                </div>
-            <?php endwhile; ?>
-        <?php else: ?>
-            <p>No questions found.</p>
-        <?php endif; ?>
-    </div>
-
+    <script>
+        function toggleAnswer(element) {
+            const answer = element.nextElementSibling;
+            answer.style.display = answer.style.display === "block" ? "none" : "block";
+        }
+    </script>
 </body>
 </html>
